@@ -1,0 +1,142 @@
+
+■変数定義用の水平線
+//-----------------------------------------------------------------------------
+
+
+■コードの中間で使う用の水平線
+//-------------------------------------------------------------
+
+
+//～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
+//↓追加定義列挙体関連
+
+
+//～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
+//↓追加定義クラス関連
+
+
+//～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
+//↓OniUI関連
+
+
+//～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
+//↓システム関連
+
+
+//～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
+//↓基本機能関連
+
+
+//～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
+//↓アクセサ関連
+
+
+
+        /// <summary>
+        /// 表示内容の一括設定データクラス
+        /// </summary>
+        public class Entity
+        {
+        }
+        
+        /// <summary>
+        /// コンストラクタ(引数なし)
+        /// </summary>
+        
+        /// <summary>
+        /// 表示内容の一括セットアップを行なう関数
+        /// </summary>
+        /// <param name="pEntity">全表示内容の設定</param>
+        public void Setup( Entity pEntity )
+        {
+        }
+
+
+
+
+        [SerializeField,Header("表示物の状態制御設定"),Tooltip("制御する内容の設定。\n※全ENUM分の設定が必要。")]
+        private List<StateData> _stateCtrlDatas = new List<StateData>();
+        //-----------------------------------------------------------------------------
+        private bool  _isInitialize = false;//初期化フラグ(trueで初期化済み)
+        private State _state        = State.ENABLE;//現在の表示物の状態
+        
+        
+        /// <summary>
+        /// 表示物の状態
+        /// </summary>
+        public enum State
+        {
+            ENABLE,//通常時(有効)
+            DISABLE//無効
+        }
+        
+        
+        /// <summary>
+        /// 表示物の状態制御情報格納用クラス
+        /// </summary>
+        [Serializable]
+        public class StateData : TableDataBase<State>
+        {
+            [SerializeField,Tooltip("この状態を表現する際に制御するオブジェクト")]
+            public List<GameObject> ctrl_objects = new List<GameObject>();
+        }
+        
+        
+        public partial class Entity
+        {
+            /// <summary>
+            /// 表示物の状態設定
+            /// </summary>
+            public State state = State.ENABLE;
+        }
+        
+        public override void OnSet()
+        {
+            base.OnSet();
+            
+            Initialize();
+            
+            SetState(entity.state);
+        }
+        
+        
+        /// <summary>
+        /// 初期化関数<br />
+        /// ※最初に必ず実行してください。
+        /// </summary>
+        private void Initialize()
+        {
+            if ( _isInitialize ) { return; }
+
+            _isInitialize = true;
+        }
+        
+        /// <summary>
+        /// 表示物の状態を設定する関数<br />
+        /// ※この中でレイアウト調整もします。<br />
+        /// <param name="pNewState"> 新しく設定する状態 </param>
+        /// </summary>
+        public void SetState( State pNewState )
+        {
+            StateData fEnableData  = DataTable.GetData(_stateCtrlDatas,State.ENABLE );//有効な時に使うもの
+            StateData fDisableData = DataTable.GetData(_stateCtrlDatas,State.DISABLE);//無効な時に使うもの
+
+            switch ( pNewState )
+            {
+                //↓無効状態
+                case State.DISABLE:
+                    fEnableData .ctrl_objects.ForEach(value => { value.SetActive(false); });
+                    fDisableData.ctrl_objects.ForEach(value => { value.SetActive(true); });
+                    break;
+
+                //↓通常状態or範囲外の値
+                case State.ENABLE:
+                default:
+                    fDisableData.ctrl_objects.ForEach(value => { value.SetActive(false); });
+                    fEnableData .ctrl_objects.ForEach(value => { value.SetActive(true); });
+                    pNewState = State.ENABLE;
+                    break;
+            }
+
+            _state = pNewState;
+        }
