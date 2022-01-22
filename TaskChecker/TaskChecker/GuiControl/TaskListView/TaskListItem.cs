@@ -13,12 +13,12 @@ namespace TaskChecker.GuiControl
 		private List<ListItemContainer<TaskListItem>>   _children              = new List<ListItemContainer<TaskListItem>>();  //子の作業工程リスト
 		//-----------------------------------------------------------------------------
 		public bool                 isExpanded                 { get => !_contentContainer.Panel2Collapsed; set => SetExpanded(value);       }//子の作業プロセスが展開表示されているかどうか
-		public bool                 isProcessTitleEditMode     { get => !_processTitleContainer.Panel2Collapsed; }//作業工程タイトルテキストの編集モード状態
 		public bool                 isEnableMemoArea           { get => !_contentContainer.Panel1Collapsed; set => SetEnableMemoArea(value); }//メモ書き用テキストエリアの表示が有効かどうか
+		public bool                 isProcessTitleEditMode     { get => !_processTitleContainer.Panel2Collapsed; }//作業工程タイトルテキストの編集モード状態
 		public TaskState            processState               { get => _processState; set => SetProcessState(value); }//作業工程の進行状態
 		public string               processTitle               { get => _processTitle.Text; set => SetProcessTitle(value); }//作業工程のタイトルテキスト
-		public Action<TaskListItem> onClickRemoveProcessButton { get; set; } = null;//この作業工程の削除ボタン押下イベント
 		public string               memoContent                { get => _memoTextArea.Text; set => _memoTextArea.Text = value; }//メモ書き用テキストエリアの内容
+		public Action<TaskListItem> onClickRemoveProcessButton { get; set; } = null;//この作業工程の削除ボタン押下イベント
 		//-----------------------------------------------------------------------------
 		
 		
@@ -53,11 +53,6 @@ namespace TaskChecker.GuiControl
 			public string processTitle = "";
 
 			/// <summary>
-			/// この作業工程の削除ボタン押下イベント
-			/// </summary>
-			public Action<TaskListItem> onClickRemoveProcessButton = null;
-
-			/// <summary>
 			/// メモ書き用テキストエリアの内容
 			/// </summary>
 			public string memoContent = "";
@@ -66,6 +61,11 @@ namespace TaskChecker.GuiControl
 			/// 子の作業工程リスト
 			/// </summary>
 			public List<Entity> children = null;
+
+			/// <summary>
+			/// この作業工程の削除ボタン押下イベント
+			/// </summary>
+			public Action<TaskListItem> onClickRemoveProcessButton = null;
 		}
 		
 		
@@ -195,19 +195,6 @@ namespace TaskChecker.GuiControl
 		
 		//～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
 		//↓アクセサ関連
-
-		/// <summary>
-		/// メモ書き用テキストエリアの表示状態を設定する関数
-		/// </summary>
-		/// <param name="pIsEnableMemoArea">メモ書きエリアが有効かどうか(trueで有効)</param>
-		private void SetEnableMemoArea( bool pIsEnableMemoArea )
-		{
-			_contentContainer.Panel1Collapsed = !pIsEnableMemoArea;
-
-			_memoButton.FlatStyle = (!pIsEnableMemoArea)? FlatStyle.Standard : FlatStyle.Flat;
-			
-			_contentContainer.Visible = (!_contentContainer.Panel1Collapsed || !_contentContainer.Panel2Collapsed);
-		}
 		
 		/// <summary>
 		/// 子の作業プロセスの展開表示状態を設定する関数
@@ -218,6 +205,19 @@ namespace TaskChecker.GuiControl
 			_contentContainer.Panel2Collapsed = !pIsExpanded;
 			
 			_expandButton.BackgroundImage = (!pIsExpanded)? Resources.arrowStateBlueRight : Resources.arrowStateBlueExpanded;
+			
+			_contentContainer.Visible = (!_contentContainer.Panel1Collapsed || !_contentContainer.Panel2Collapsed);
+		}
+
+		/// <summary>
+		/// メモ書き用テキストエリアの表示状態を設定する関数
+		/// </summary>
+		/// <param name="pIsEnableMemoArea">メモ書きエリアが有効かどうか(trueで有効)</param>
+		private void SetEnableMemoArea( bool pIsEnableMemoArea )
+		{
+			_contentContainer.Panel1Collapsed = !pIsEnableMemoArea;
+
+			_memoButton.FlatStyle = (!pIsEnableMemoArea)? FlatStyle.Standard : FlatStyle.Flat;
 			
 			_contentContainer.Visible = (!_contentContainer.Panel1Collapsed || !_contentContainer.Panel2Collapsed);
 		}
