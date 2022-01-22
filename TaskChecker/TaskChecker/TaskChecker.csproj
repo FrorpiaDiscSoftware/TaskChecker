@@ -60,6 +60,8 @@
     <Compile Include="GuiControl\TaskListView\TaskListView.Designer.cs">
       <DependentUpon>TaskListView.cs</DependentUpon>
     </Compile>
+    <Compile Include="GuiControl\_Base\IUserControlBase.cs" />
+    <Compile Include="GuiControl\_Base\UserControlBase.cs" />
     <Compile Include="GuiControl\_Utilities\ListItemContainer.cs">
       <SubType>UserControl</SubType>
     </Compile>

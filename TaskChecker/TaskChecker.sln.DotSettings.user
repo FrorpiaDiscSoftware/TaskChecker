@@ -1,4 +1,59 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C4795E57DDEC1C4F97BBC8C7173EBBCA/Text/@EntryValue">$HEADER$using System.Windows.Forms;
+
+namespace $NAMESPACE$
+{
+    public partial class $CLASS$ : UserControl
+    {
+        //-----------------------------------------------------------------------------
+        
+        
+        //～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
+        //↓追加定義クラス関連
+        
+        /// &lt;summary&gt;
+        /// 表示内容の一括設定データクラス
+        /// &lt;/summary&gt;
+        public class Entity
+        {
+        }
+        
+        
+        //～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
+        //↓システム関連
+        
+        /// &lt;summary&gt;
+        /// コンストラクタ(引数なし)
+        /// &lt;/summary&gt;
+        public $CLASS$()
+        {
+            InitializeComponent();
+        }
+        
+        /// &lt;summary&gt;
+        /// コンストラクタ
+        /// &lt;/summary&gt;
+        /// &lt;param name="pEntity"&gt;初期設定&lt;/param&gt;
+        public $CLASS$( Entity pEntity )
+        {
+            InitializeComponent();
+            Setup(pEntity);
+        }
+        
+        
+        //～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
+        //↓基本機能関連
+        
+        /// &lt;summary&gt;
+        /// 表示内容の一括セットアップを行なう関数
+        /// &lt;/summary&gt;
+        /// &lt;param name="pEntity"&gt;全表示内容の設定&lt;/param&gt;
+        public void Setup( Entity pEntity )
+        {
+            if ( pEntity == null ) { return; }
+        }
+    }
+}</s:String>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=TaskChecker_002FGuiControl_002FTaskListView_002FTaskListItem/@EntryIndexedValue">False</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=TaskChecker_002FGuiControl_002FTaskListView_002FTaskListView/@EntryIndexedValue">False</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=TaskChecker_002FProperties_002FResources/@EntryIndexedValue">True</s:Boolean>
