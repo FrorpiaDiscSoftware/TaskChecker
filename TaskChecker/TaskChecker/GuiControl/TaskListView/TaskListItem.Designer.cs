@@ -32,19 +32,21 @@ namespace TaskChecker.GuiControl
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TaskListItem));
-			this.splitContainer1      = new System.Windows.Forms.SplitContainer();
-			this.splitContainer2      = new System.Windows.Forms.SplitContainer();
-			this._expandButton        = new System.Windows.Forms.Button();
-			this.splitContainer3      = new System.Windows.Forms.SplitContainer();
-			this._statusButton        = new System.Windows.Forms.Button();
-			this._processStateMenu    = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.splitContainer7      = new System.Windows.Forms.SplitContainer();
-			this._processTitle        = new System.Windows.Forms.Label();
-			this._addProcessButton    = new System.Windows.Forms.Button();
-			this._memoButton          = new System.Windows.Forms.Button();
-			this._removeProcessButton = new System.Windows.Forms.Button();
-			this._contentContainer    = new System.Windows.Forms.SplitContainer();
-			this._memoTextArea        = new System.Windows.Forms.RichTextBox();
+			this.splitContainer1        = new System.Windows.Forms.SplitContainer();
+			this.splitContainer2        = new System.Windows.Forms.SplitContainer();
+			this._expandButton          = new System.Windows.Forms.Button();
+			this.splitContainer3        = new System.Windows.Forms.SplitContainer();
+			this._statusButton          = new System.Windows.Forms.Button();
+			this._processStateMenu      = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.splitContainer7        = new System.Windows.Forms.SplitContainer();
+			this._processTitleContainer = new System.Windows.Forms.SplitContainer();
+			this._processTitle          = new System.Windows.Forms.Label();
+			this._processTitleInputBox  = new System.Windows.Forms.TextBox();
+			this._addProcessButton      = new System.Windows.Forms.Button();
+			this._memoButton            = new System.Windows.Forms.Button();
+			this._removeProcessButton   = new System.Windows.Forms.Button();
+			this._contentContainer      = new System.Windows.Forms.SplitContainer();
+			this._memoTextArea          = new System.Windows.Forms.RichTextBox();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
@@ -61,6 +63,10 @@ namespace TaskChecker.GuiControl
 			this.splitContainer7.Panel1.SuspendLayout();
 			this.splitContainer7.Panel2.SuspendLayout();
 			this.splitContainer7.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this._processTitleContainer)).BeginInit();
+			this._processTitleContainer.Panel1.SuspendLayout();
+			this._processTitleContainer.Panel2.SuspendLayout();
+			this._processTitleContainer.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this._contentContainer)).BeginInit();
 			this._contentContainer.Panel1.SuspendLayout();
 			this._contentContainer.SuspendLayout();
@@ -171,7 +177,7 @@ namespace TaskChecker.GuiControl
 			// 
 			// splitContainer7.Panel1
 			// 
-			this.splitContainer7.Panel1.Controls.Add(this._processTitle);
+			this.splitContainer7.Panel1.Controls.Add(this._processTitleContainer);
 			// 
 			// splitContainer7.Panel2
 			// 
@@ -183,16 +189,48 @@ namespace TaskChecker.GuiControl
 			this.splitContainer7.SplitterDistance = 359;
 			this.splitContainer7.TabIndex         = 1;
 			// 
+			// _processTitleContainer
+			// 
+			this._processTitleContainer.Dock            = System.Windows.Forms.DockStyle.Fill;
+			this._processTitleContainer.IsSplitterFixed = true;
+			this._processTitleContainer.Location        = new System.Drawing.Point(0, 0);
+			this._processTitleContainer.Margin          = new System.Windows.Forms.Padding(0);
+			this._processTitleContainer.Name            = "_processTitleContainer";
+			// 
+			// _processTitleContainer.Panel1
+			// 
+			this._processTitleContainer.Panel1.Controls.Add(this._processTitle);
+			// 
+			// _processTitleContainer.Panel2
+			// 
+			this._processTitleContainer.Panel2.Controls.Add(this._processTitleInputBox);
+			this._processTitleContainer.Panel2.Padding   = new System.Windows.Forms.Padding(0, 3, 0, 0);
+			this._processTitleContainer.Size             = new System.Drawing.Size(359, 25);
+			this._processTitleContainer.SplitterDistance = 170;
+			this._processTitleContainer.TabIndex         = 0;
+			// 
 			// _processTitle
 			// 
-			this._processTitle.Dock      = System.Windows.Forms.DockStyle.Fill;
-			this._processTitle.Font      = new System.Drawing.Font("ＭＳ ゴシック", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this._processTitle.Location  = new System.Drawing.Point(0, 0);
-			this._processTitle.Name      = "_processTitle";
-			this._processTitle.Size      = new System.Drawing.Size(359, 25);
-			this._processTitle.TabIndex  = 3;
-			this._processTitle.Text      = "TitleText";
-			this._processTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this._processTitle.Dock        =  System.Windows.Forms.DockStyle.Fill;
+			this._processTitle.Font        =  new System.Drawing.Font("ＭＳ ゴシック", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+			this._processTitle.Location    =  new System.Drawing.Point(0, 0);
+			this._processTitle.Name        =  "_processTitle";
+			this._processTitle.Size        =  new System.Drawing.Size(170, 25);
+			this._processTitle.TabIndex    =  3;
+			this._processTitle.Text        =  "TitleText";
+			this._processTitle.TextAlign   =  System.Drawing.ContentAlignment.MiddleLeft;
+			this._processTitle.Click       += new System.EventHandler(this._processTitle_Click);
+			this._processTitle.DoubleClick += new System.EventHandler(this._processTitle_DoubleClick);
+			// 
+			// _processTitleInputBox
+			// 
+			this._processTitleInputBox.Dock           =  System.Windows.Forms.DockStyle.Fill;
+			this._processTitleInputBox.Location       =  new System.Drawing.Point(0, 3);
+			this._processTitleInputBox.Name           =  "_processTitleInputBox";
+			this._processTitleInputBox.Size           =  new System.Drawing.Size(185, 19);
+			this._processTitleInputBox.TabIndex       =  0;
+			this._processTitleInputBox.Text           =  "TitleText";
+			this._processTitleInputBox.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this._processTitleInputBox_PreviewKeyDown);
 			// 
 			// _addProcessButton
 			// 
@@ -283,11 +321,20 @@ namespace TaskChecker.GuiControl
 			this.splitContainer7.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer7)).EndInit();
 			this.splitContainer7.ResumeLayout(false);
+			this._processTitleContainer.Panel1.ResumeLayout(false);
+			this._processTitleContainer.Panel2.ResumeLayout(false);
+			this._processTitleContainer.Panel2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this._processTitleContainer)).EndInit();
+			this._processTitleContainer.ResumeLayout(false);
 			this._contentContainer.Panel1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this._contentContainer)).EndInit();
 			this._contentContainer.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
+
+		private System.Windows.Forms.TextBox _processTitleInputBox;
+
+		private System.Windows.Forms.SplitContainer _processTitleContainer;
 
 		private System.Windows.Forms.ContextMenuStrip _processStateMenu;
 

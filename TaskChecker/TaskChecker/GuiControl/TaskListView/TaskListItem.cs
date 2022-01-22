@@ -13,9 +13,10 @@ namespace TaskChecker.GuiControl
 		private List<ListItemContainer<TaskListItem>>   _children              = new List<ListItemContainer<TaskListItem>>();  //子の作業工程リスト
 		//-----------------------------------------------------------------------------
 		public bool                 isExpanded                 { get => !_contentContainer.Panel2Collapsed; set => SetExpanded(value);       }//子の作業プロセスが展開表示されているかどうか
+		public bool                 isProcessTitleEditMode     { get => !_processTitleContainer.Panel2Collapsed; }//作業工程タイトルテキストの編集モード状態
 		public bool                 isEnableMemoArea           { get => !_contentContainer.Panel1Collapsed; set => SetEnableMemoArea(value); }//メモ書き用テキストエリアの表示が有効かどうか
 		public TaskState            processState               { get => _processState; set => SetProcessState(value); }//作業工程の進行状態
-		public string               processTitle               { get => _processTitle.Text; set => _processTitle.Text = value; }//作業工程のタイトルテキスト
+		public string               processTitle               { get => _processTitle.Text; set => SetProcessTitle(value); }//作業工程のタイトルテキスト
 		public Action<TaskListItem> onClickRemoveProcessButton { get; set; } = null;//この作業工程の削除ボタン押下イベント
 		public string               memoContent                { get => _memoTextArea.Text; set => _memoTextArea.Text = value; }//メモ書き用テキストエリアの内容
 		//-----------------------------------------------------------------------------
@@ -92,8 +93,8 @@ namespace TaskChecker.GuiControl
 			SetExpanded(pEntity.isExpanded);
 			SetEnableMemoArea(pEntity.isEnableMemoArea);
 			SetProcessState(pEntity.processState);
+			SetProcessTitle(pEntity.processTitle);
 
-			_processTitle.Text         = pEntity.processTitle;
 			onClickRemoveProcessButton = pEntity.onClickRemoveProcessButton;
 			_memoTextArea.Text         = pEntity.memoContent;
 
@@ -102,6 +103,8 @@ namespace TaskChecker.GuiControl
 				ClearProcessItem();
 				pEntity.children.ForEach(value => { AddProcessItem(value); });
 			}
+			
+			SetProcessTitleEditMode(false);
 		}
 
 		/// <summary>
@@ -233,6 +236,27 @@ namespace TaskChecker.GuiControl
 			_processStateMenuItems[pState       ].Checked = true;
 			
 			_processState = pState;
+		}
+
+		/// <summary>
+		/// 作業工程タイトルテキストを設定する関数
+		/// </summary>
+		/// <param name="pTitleText">設定する新しいタイトルテキスト</param>
+		private void SetProcessTitle( string pTitleText )
+		{
+			if ( pTitleText == null ) { return; }
+
+			_processTitleInputBox.Text = _processTitle.Text = pTitleText;
+		}
+
+		/// <summary>
+		/// 作業工程タイトルテキストの編集モード状態を設定する関数
+		/// </summary>
+		/// <param name="pIsEditMode">編集モードかどうか(trueで編集モード)</param>
+		private void SetProcessTitleEditMode( bool pIsEditMode )
+		{
+			_processTitleContainer.Panel1Collapsed = pIsEditMode;
+			_processTitleContainer.Panel2Collapsed = !pIsEditMode;
 		}
 
 		/// <summary>
