@@ -196,14 +196,15 @@ namespace TaskChecker.GuiControl
 			// 
 			// _addProcessButton
 			// 
-			this._addProcessButton.BackgroundImage         = global::TaskChecker.Properties.Resources.add;
-			this._addProcessButton.BackgroundImageLayout   = System.Windows.Forms.ImageLayout.Center;
-			this._addProcessButton.Location                = new System.Drawing.Point(2, 0);
-			this._addProcessButton.Margin                  = new System.Windows.Forms.Padding(0);
-			this._addProcessButton.Name                    = "_addProcessButton";
-			this._addProcessButton.Size                    = new System.Drawing.Size(25, 25);
-			this._addProcessButton.TabIndex                = 2;
-			this._addProcessButton.UseVisualStyleBackColor = true;
+			this._addProcessButton.BackgroundImage         =  global::TaskChecker.Properties.Resources.add;
+			this._addProcessButton.BackgroundImageLayout   =  System.Windows.Forms.ImageLayout.Center;
+			this._addProcessButton.Location                =  new System.Drawing.Point(2, 0);
+			this._addProcessButton.Margin                  =  new System.Windows.Forms.Padding(0);
+			this._addProcessButton.Name                    =  "_addProcessButton";
+			this._addProcessButton.Size                    =  new System.Drawing.Size(25, 25);
+			this._addProcessButton.TabIndex                =  2;
+			this._addProcessButton.UseVisualStyleBackColor =  true;
+			this._addProcessButton.Click                   += new System.EventHandler(this._addProcessButton_Click);
 			// 
 			// _memoButton
 			// 

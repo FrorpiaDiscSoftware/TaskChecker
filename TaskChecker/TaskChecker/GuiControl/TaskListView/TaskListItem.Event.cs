@@ -20,6 +20,21 @@ namespace TaskChecker.GuiControl
 		{
 			SetProcessState(_processState.NextState());
 		}
+		
+		/// <summary>
+		/// 作業工程-追加ボタンのクリックイベント
+		/// </summary>
+		private void _addProcessButton_Click( object pSender, EventArgs pEventArgs )
+		{
+			int fRemoveIdx = _children.Count;
+			
+			AddProcessItem(new Entity {
+				isEnableMemoArea           = false,
+				isExpanded                 = false,
+				processState               = TaskState.NOT_WORKING,
+				onClickRemoveProcessButton = value => { RemoveProcessItem(fRemoveIdx); },
+			});
+		}
 
 		/// <summary>
 		/// 作業工程-削除ボタンのクリックイベント

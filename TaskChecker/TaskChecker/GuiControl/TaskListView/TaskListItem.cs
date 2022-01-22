@@ -12,10 +12,12 @@ namespace TaskChecker.GuiControl
 		private Dictionary<TaskState,ToolStripMenuItem> _processStateMenuItems = new Dictionary<TaskState,ToolStripMenuItem>();//作業工程の進行状態設定メニュー項目リスト
 		private List<ListItemContainer<TaskListItem>>   _children              = new List<ListItemContainer<TaskListItem>>();  //子の作業工程リスト
 		//-----------------------------------------------------------------------------
-		public bool                 isEnableMemoArea           { get => !_contentContainer.Panel1Collapsed; set => SetEnableMemoArea(value); }//メモ書き用テキストエリアの表示が有効かどうか
 		public bool                 isExpanded                 { get => !_contentContainer.Panel2Collapsed; set => SetExpanded(value);       }//子の作業プロセスが展開表示されているかどうか
+		public bool                 isEnableMemoArea           { get => !_contentContainer.Panel1Collapsed; set => SetEnableMemoArea(value); }//メモ書き用テキストエリアの表示が有効かどうか
 		public TaskState            processState               { get => _processState; set => SetProcessState(value); }//作業工程の進行状態
+		public string               processTitle               { get => _processTitle.Text; set => _processTitle.Text = value; }//作業工程のタイトルテキスト
 		public Action<TaskListItem> onClickRemoveProcessButton { get; set; } = null;//この作業工程の削除ボタン押下イベント
+		public string               memoContent                { get => _memoTextArea.Text; set => _memoTextArea.Text = value; }//メモ書き用テキストエリアの内容
 		//-----------------------------------------------------------------------------
 		
 		
@@ -28,26 +30,41 @@ namespace TaskChecker.GuiControl
 		public class Entity
 		{
 			/// <summary>
-			/// メモ書き用テキストエリアの表示が有効かどうか<br />
-			/// ※trueで有効。
-			/// </summary>
-			public bool isEnableMemoArea = false;
-			
-			/// <summary>
 			/// 子の作業プロセスを展開するかどうか<br />
 			/// ※trueで展開。
 			/// </summary>
 			public bool isExpanded = false;
+			
+			/// <summary>
+			/// メモ書き用テキストエリアの表示が有効かどうか<br />
+			/// ※trueで有効。
+			/// </summary>
+			public bool isEnableMemoArea = false;
 
 			/// <summary>
 			/// 作業工程の進行状態
 			/// </summary>
 			public TaskState processState = TaskState.NOT_WORKING;
+			
+			/// <summary>
+			/// 作業工程のタイトルテキスト
+			/// </summary>
+			public string processTitle = "";
 
 			/// <summary>
 			/// この作業工程の削除ボタン押下イベント
 			/// </summary>
 			public Action<TaskListItem> onClickRemoveProcessButton = null;
+
+			/// <summary>
+			/// メモ書き用テキストエリアの内容
+			/// </summary>
+			public string memoContent = "";
+
+			/// <summary>
+			/// 子の作業工程リスト
+			/// </summary>
+			public List<Entity> children = null;
 		}
 		
 		
@@ -76,7 +93,15 @@ namespace TaskChecker.GuiControl
 			SetEnableMemoArea(pEntity.isEnableMemoArea);
 			SetProcessState(pEntity.processState);
 
+			_processTitle.Text         = pEntity.processTitle;
 			onClickRemoveProcessButton = pEntity.onClickRemoveProcessButton;
+			_memoTextArea.Text         = pEntity.memoContent;
+
+			if ( pEntity.children != null )
+			{
+				ClearProcessItem();
+				pEntity.children.ForEach(value => { AddProcessItem(value); });
+			}
 		}
 
 		/// <summary>
