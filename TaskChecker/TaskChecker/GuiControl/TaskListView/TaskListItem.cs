@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using TaskChecker.Properties;
@@ -8,10 +9,16 @@ namespace TaskChecker.GuiControl
 {
 	public partial class TaskListItem : UserControl
 	{
+		private bool                                    _isSelected            = false;                                        //選択されているかどうかのフラグ(trueで選択中)
+		private bool                                    _isPressControlKey     = false;                                        //Controlキーが押されているかどうか(trueで押されている)
+		private bool                                    _isPressShiftKey       = false;                                        //Shiftキーが押されているかどうか(trueで押されている)
 		private TaskState                               _processState          = TaskState.NOT_WORKING;                        //作業工程の進行状態
 		private Dictionary<TaskState,ToolStripMenuItem> _processStateMenuItems = new Dictionary<TaskState,ToolStripMenuItem>();//作業工程の進行状態設定メニュー項目リスト
 		private List<ListItemContainer<TaskListItem>>   _children              = new List<ListItemContainer<TaskListItem>>();  //子の作業工程リスト
 		//-----------------------------------------------------------------------------
+		public bool                 isSelected                 { get => _isSelected; set => SetSelected(value); }//選択されているかどうかのフラグ(trueで選択中)
+		public bool                 isPressControlKey          { get => _isPressControlKey; }//Controlキーが押されているかどうか(trueで押されている)
+		public bool                 isPressShiftKey            { get => _isPressShiftKey; }//Shiftキーが押されているかどうか(trueで押されている)
 		public bool                 isExpanded                 { get => !_contentContainer.Panel2Collapsed; set => SetExpanded(value);       }//子の作業プロセスが展開表示されているかどうか
 		public bool                 isEnableMemoArea           { get => !_contentContainer.Panel1Collapsed; set => SetEnableMemoArea(value); }//メモ書き用テキストエリアの表示が有効かどうか
 		public bool                 isProcessTitleEditMode     { get => !_processTitleContainer.Panel2Collapsed; }//作業工程タイトルテキストの編集モード状態
@@ -19,6 +26,7 @@ namespace TaskChecker.GuiControl
 		public string               processTitle               { get => _processTitle.Text; set => SetProcessTitle(value); }//作業工程のタイトルテキスト
 		public string               memoContent                { get => _memoTextArea.Text; set => _memoTextArea.Text = value; }//メモ書き用テキストエリアの内容
 		public Action<TaskListItem> onClickRemoveProcessButton { get; set; } = null;//この作業工程の削除ボタン押下イベント
+		public Action<TaskListItem> onClickSelected            { get; set; } = null;//クリック操作による選択イベント
 		//-----------------------------------------------------------------------------
 		
 		
@@ -66,6 +74,11 @@ namespace TaskChecker.GuiControl
 			/// この作業工程の削除ボタン押下イベント
 			/// </summary>
 			public Action<TaskListItem> onClickRemoveProcessButton = null;
+
+			/// <summary>
+			/// クリック操作による選択イベント
+			/// </summary>
+			public Action<TaskListItem> onClickSelected = null;
 		}
 		
 		
@@ -96,6 +109,7 @@ namespace TaskChecker.GuiControl
 			SetProcessTitle(pEntity.processTitle);
 
 			onClickRemoveProcessButton = pEntity.onClickRemoveProcessButton;
+			onClickSelected            = pEntity.onClickSelected;
 			_memoTextArea.Text         = pEntity.memoContent;
 
 			if ( pEntity.children != null )
@@ -105,6 +119,18 @@ namespace TaskChecker.GuiControl
 			}
 			
 			SetProcessTitleEditMode(false);
+
+			KeyDown += ( pSender, pArgs ) =>
+			{
+				if ( pArgs.Control ) { _isPressControlKey = true; }
+				if ( pArgs.Shift   ) { _isPressShiftKey   = true; }
+			};
+			
+			KeyUp += ( pSender, pArgs ) =>
+			{
+				if ( pArgs.Control ) { _isPressControlKey = false; }
+				if ( pArgs.Shift   ) { _isPressShiftKey   = false; }
+			};
 		}
 
 		/// <summary>
@@ -195,6 +221,25 @@ namespace TaskChecker.GuiControl
 		
 		//～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
 		//↓アクセサ関連
+
+		/// <summary>
+		/// 選択状態を設定する関数
+		/// </summary>
+		/// <param name="pIsSelected">選択状態(trueで選択中)</param>
+		private void SetSelected( bool pIsSelected )
+		{
+			_processTitle.BackColor = (pIsSelected)? SystemColors.Highlight         : SystemColors.Control;
+			_processTitle.ForeColor = (pIsSelected)? SystemColors.ControlLightLight : SystemColors.ControlText;
+
+			BackColor = _processTitle.BackColor;
+			_rootContainer         .BackColor = _rootContainer         .Panel1.BackColor = _rootContainer         .Panel2.BackColor = _processTitle.BackColor;
+			_headerContainer       .BackColor = _headerContainer       .Panel1.BackColor = _headerContainer       .Panel2.BackColor = _processTitle.BackColor;
+			_headerStatusContainer .BackColor = _headerStatusContainer .Panel1.BackColor = _headerStatusContainer .Panel2.BackColor = _processTitle.BackColor;
+			_headerContentContainer.BackColor = _headerContentContainer.Panel1.BackColor = _headerContentContainer.Panel2.BackColor = _processTitle.BackColor;
+			_contentContainer      .BackColor = _contentContainer      .Panel1.BackColor = _contentContainer      .Panel2.BackColor = _processTitle.BackColor;
+			
+			_isSelected = pIsSelected;
+		}
 		
 		/// <summary>
 		/// 子の作業プロセスの展開表示状態を設定する関数
