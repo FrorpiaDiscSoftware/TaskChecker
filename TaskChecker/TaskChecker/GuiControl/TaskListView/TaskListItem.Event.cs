@@ -54,13 +54,12 @@ namespace TaskChecker.GuiControl
 		/// </summary>
 		private void _addProcessButton_Click( object pSender, EventArgs pEventArgs )
 		{
-			int fAddItemIdx = _children.Count;//TODO:ListItem内にちゃんとIndex入れて、Remove時に管理する必要あり。
-			
 			AddProcessItem(new Entity {
+				id                         = _children.Count,
 				isEnableMemoArea           = false,
 				isExpanded                 = false,
 				processState               = TaskState.NOT_WORKING,
-				onClickRemoveProcessButton = value => { RemoveProcessItem(fAddItemIdx); },
+				onClickRemoveProcessButton = value => { RemoveProcessItem(value.id); },
 				onClickSelected            = value =>
 				{
 					if ( _isPressControlKey ) { return; }
@@ -68,9 +67,9 @@ namespace TaskChecker.GuiControl
 					if ( _isPressShiftKey )
 					{
 						//↓Shiftキーを押しながらだった場合(前回選択した物から今回選択した物までを選択する)
-						if ( (fAddItemIdx - 1) < 0 ) { return; }
+						if ( value.id - 1 < 0 ) { return; }
 						//-------------------------------------------------------------
-						for( int i = fAddItemIdx - 1; i >= 0; i-- )
+						for( int i = value.id - 1; i >= 0; i-- )
 						{
 							if ( _children[i].item.isSelected ) { break; }
 							_children[i].item.SetSelected(true);
@@ -81,7 +80,7 @@ namespace TaskChecker.GuiControl
 						//↓Shiftキーが押されていない場合(単体選択動作)
 						for( int i = 0; i < _children.Count; i++ )
 						{
-							if ( i == fAddItemIdx ) { continue; }
+							if ( i == value.id ) { continue; }
 							_children[i].item.SetSelected(false);
 						}
 					}

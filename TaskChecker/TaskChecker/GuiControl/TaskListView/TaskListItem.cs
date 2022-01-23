@@ -12,6 +12,7 @@ namespace TaskChecker.GuiControl
 		private bool                                    _isSelected            = false;                                        //選択されているかどうかのフラグ(trueで選択中)
 		private bool                                    _isPressControlKey     = false;                                        //Controlキーが押されているかどうか(trueで押されている)
 		private bool                                    _isPressShiftKey       = false;                                        //Shiftキーが押されているかどうか(trueで押されている)
+		private int                                     _id                    = 0;                                            //このコントロールのID(Indexに使用)
 		private TaskState                               _processState          = TaskState.NOT_WORKING;                        //作業工程の進行状態
 		private Dictionary<TaskState,ToolStripMenuItem> _processStateMenuItems = new Dictionary<TaskState,ToolStripMenuItem>();//作業工程の進行状態設定メニュー項目リスト
 		private List<ListItemContainer<TaskListItem>>   _children              = new List<ListItemContainer<TaskListItem>>();  //子の作業工程リスト
@@ -22,6 +23,7 @@ namespace TaskChecker.GuiControl
 		public bool                 isExpanded                 { get => !_contentContainer.Panel2Collapsed; set => SetExpanded(value);       }//子の作業プロセスが展開表示されているかどうか
 		public bool                 isEnableMemoArea           { get => !_contentContainer.Panel1Collapsed; set => SetEnableMemoArea(value); }//メモ書き用テキストエリアの表示が有効かどうか
 		public bool                 isProcessTitleEditMode     { get => !_processTitleContainer.Panel2Collapsed; }//作業工程タイトルテキストの編集モード状態
+		public int                  id                         { get => _id; }//このコントロールのID(Indexに使用)
 		public TaskState            processState               { get => _processState; set => SetProcessState(value); }//作業工程の進行状態
 		public string               processTitle               { get => _processTitle.Text; set => SetProcessTitle(value); }//作業工程のタイトルテキスト
 		public string               memoContent                { get => _memoTextArea.Text; set => _memoTextArea.Text = value; }//メモ書き用テキストエリアの内容
@@ -38,6 +40,11 @@ namespace TaskChecker.GuiControl
 		/// </summary>
 		public class Entity
 		{
+			/// <summary>
+			/// このコントロールのID(Indexに使用)
+			/// </summary>
+			public int id = 0;
+			
 			/// <summary>
 			/// 子の作業プロセスを展開するかどうか<br />
 			/// ※trueで展開。
@@ -108,6 +115,7 @@ namespace TaskChecker.GuiControl
 			SetProcessState(pEntity.processState);
 			SetProcessTitle(pEntity.processTitle);
 
+			_id                        = pEntity.id;
 			onClickRemoveProcessButton = pEntity.onClickRemoveProcessButton;
 			onClickSelected            = pEntity.onClickSelected;
 			_memoTextArea.Text         = pEntity.memoContent;
@@ -179,7 +187,7 @@ namespace TaskChecker.GuiControl
 				_children.Add(_children.Last().next);
 			}
 			
-			fItemEntity.item.Setup((pEntity != null)? pEntity : new Entity());
+			fItemEntity.item.Setup((pEntity != null)? pEntity : new Entity { id = _children.Count - 1 });
 		}
 
 		/// <summary>
@@ -194,6 +202,16 @@ namespace TaskChecker.GuiControl
 			
 			if ( _children.Count <= 1 ) { ClearProcessItem(); return; }
 
+			//▽ID調整
+			if ( pIndex + 1 < _children.Count )
+			{
+				for( int i = pIndex + 1; i < _children.Count; i++ )
+				{
+					_children[i].item._id--;
+				}
+			}
+
+			//▽削除処理
 			if ( pIndex == 0 )
 			{
 				_contentContainer.Panel2.Controls.Clear();
