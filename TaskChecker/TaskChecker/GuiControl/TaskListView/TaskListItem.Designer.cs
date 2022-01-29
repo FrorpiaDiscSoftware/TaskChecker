@@ -32,79 +32,85 @@ namespace TaskChecker.GuiControl
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TaskListItem));
-			this.splitContainer1      = new System.Windows.Forms.SplitContainer();
-			this.splitContainer2      = new System.Windows.Forms.SplitContainer();
-			this._expandButton        = new System.Windows.Forms.Button();
-			this.splitContainer3      = new System.Windows.Forms.SplitContainer();
-			this._statusButton        = new System.Windows.Forms.Button();
-			this._processStateMenu    = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.splitContainer7      = new System.Windows.Forms.SplitContainer();
-			this._processTitle        = new System.Windows.Forms.Label();
-			this._addProcessButton    = new System.Windows.Forms.Button();
-			this._memoButton          = new System.Windows.Forms.Button();
-			this._removeProcessButton = new System.Windows.Forms.Button();
-			this._contentContainer    = new System.Windows.Forms.SplitContainer();
-			this._memoTextArea        = new System.Windows.Forms.RichTextBox();
-			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-			this.splitContainer1.Panel1.SuspendLayout();
-			this.splitContainer1.Panel2.SuspendLayout();
-			this.splitContainer1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
-			this.splitContainer2.Panel1.SuspendLayout();
-			this.splitContainer2.Panel2.SuspendLayout();
-			this.splitContainer2.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
-			this.splitContainer3.Panel1.SuspendLayout();
-			this.splitContainer3.Panel2.SuspendLayout();
-			this.splitContainer3.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.splitContainer7)).BeginInit();
-			this.splitContainer7.Panel1.SuspendLayout();
-			this.splitContainer7.Panel2.SuspendLayout();
-			this.splitContainer7.SuspendLayout();
+			this._rootContainer          = new System.Windows.Forms.SplitContainer();
+			this._headerContainer        = new System.Windows.Forms.SplitContainer();
+			this._expandButton           = new System.Windows.Forms.Button();
+			this._headerStatusContainer  = new System.Windows.Forms.SplitContainer();
+			this._statusButton           = new System.Windows.Forms.Button();
+			this._processStateMenu       = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this._headerContentContainer = new System.Windows.Forms.SplitContainer();
+			this._processTitleContainer  = new System.Windows.Forms.SplitContainer();
+			this._processTitle           = new System.Windows.Forms.Label();
+			this._processTitleInputBox   = new System.Windows.Forms.TextBox();
+			this._addProcessButton       = new System.Windows.Forms.Button();
+			this._memoButton             = new System.Windows.Forms.Button();
+			this._removeProcessButton    = new System.Windows.Forms.Button();
+			this._contentContainer       = new System.Windows.Forms.SplitContainer();
+			this._memoTextArea           = new System.Windows.Forms.RichTextBox();
+			((System.ComponentModel.ISupportInitialize)(this._rootContainer)).BeginInit();
+			this._rootContainer.Panel1.SuspendLayout();
+			this._rootContainer.Panel2.SuspendLayout();
+			this._rootContainer.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this._headerContainer)).BeginInit();
+			this._headerContainer.Panel1.SuspendLayout();
+			this._headerContainer.Panel2.SuspendLayout();
+			this._headerContainer.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this._headerStatusContainer)).BeginInit();
+			this._headerStatusContainer.Panel1.SuspendLayout();
+			this._headerStatusContainer.Panel2.SuspendLayout();
+			this._headerStatusContainer.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this._headerContentContainer)).BeginInit();
+			this._headerContentContainer.Panel1.SuspendLayout();
+			this._headerContentContainer.Panel2.SuspendLayout();
+			this._headerContentContainer.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this._processTitleContainer)).BeginInit();
+			this._processTitleContainer.Panel1.SuspendLayout();
+			this._processTitleContainer.Panel2.SuspendLayout();
+			this._processTitleContainer.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this._contentContainer)).BeginInit();
 			this._contentContainer.Panel1.SuspendLayout();
 			this._contentContainer.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// splitContainer1
+			// _rootContainer
 			// 
-			this.splitContainer1.Dock        = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer1.FixedPanel  = System.Windows.Forms.FixedPanel.Panel1;
-			this.splitContainer1.Location    = new System.Drawing.Point(0, 0);
-			this.splitContainer1.Name        = "splitContainer1";
-			this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+			this._rootContainer.Dock        = System.Windows.Forms.DockStyle.Fill;
+			this._rootContainer.FixedPanel  = System.Windows.Forms.FixedPanel.Panel1;
+			this._rootContainer.Location    = new System.Drawing.Point(0, 0);
+			this._rootContainer.Name        = "_rootContainer";
+			this._rootContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
 			// 
-			// splitContainer1.Panel1
+			// _rootContainer.Panel1
 			// 
-			this.splitContainer1.Panel1.Controls.Add(this.splitContainer2);
-			this.splitContainer1.Panel1MinSize = 20;
+			this._rootContainer.Panel1.Controls.Add(this._headerContainer);
+			this._rootContainer.Panel1MinSize = 20;
 			// 
-			// splitContainer1.Panel2
+			// _rootContainer.Panel2
 			// 
-			this.splitContainer1.Panel2.Controls.Add(this._contentContainer);
-			this.splitContainer1.Size             = new System.Drawing.Size(500, 300);
-			this.splitContainer1.SplitterDistance = 25;
-			this.splitContainer1.TabIndex         = 0;
+			this._rootContainer.Panel2.Controls.Add(this._contentContainer);
+			this._rootContainer.Size             = new System.Drawing.Size(500, 300);
+			this._rootContainer.SplitterDistance = 25;
+			this._rootContainer.TabIndex         = 0;
 			// 
-			// splitContainer2
+			// _headerContainer
 			// 
-			this.splitContainer2.Dock       = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer2.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-			this.splitContainer2.Location   = new System.Drawing.Point(0, 0);
-			this.splitContainer2.Margin     = new System.Windows.Forms.Padding(0);
-			this.splitContainer2.Name       = "splitContainer2";
+			this._headerContainer.Dock       = System.Windows.Forms.DockStyle.Fill;
+			this._headerContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+			this._headerContainer.Location   = new System.Drawing.Point(0, 0);
+			this._headerContainer.Margin     = new System.Windows.Forms.Padding(0);
+			this._headerContainer.Name       = "_headerContainer";
 			// 
-			// splitContainer2.Panel1
+			// _headerContainer.Panel1
 			// 
-			this.splitContainer2.Panel1.Controls.Add(this._expandButton);
-			this.splitContainer2.Panel1MinSize = 20;
+			this._headerContainer.Panel1.Controls.Add(this._expandButton);
+			this._headerContainer.Panel1MinSize = 20;
 			// 
-			// splitContainer2.Panel2
+			// _headerContainer.Panel2
 			// 
-			this.splitContainer2.Panel2.Controls.Add(this.splitContainer3);
-			this.splitContainer2.Size             = new System.Drawing.Size(500, 25);
-			this.splitContainer2.SplitterDistance = 25;
-			this.splitContainer2.TabIndex         = 0;
+			this._headerContainer.Panel2.Controls.Add(this._headerStatusContainer);
+			this._headerContainer.Size             = new System.Drawing.Size(500, 25);
+			this._headerContainer.SplitterDistance = 25;
+			this._headerContainer.TabIndex         = 0;
 			// 
 			// _expandButton
 			// 
@@ -120,25 +126,25 @@ namespace TaskChecker.GuiControl
 			this._expandButton.UseVisualStyleBackColor =  true;
 			this._expandButton.Click                   += new System.EventHandler(this._expandButton_Click);
 			// 
-			// splitContainer3
+			// _headerStatusContainer
 			// 
-			this.splitContainer3.Dock       = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-			this.splitContainer3.Location   = new System.Drawing.Point(0, 0);
-			this.splitContainer3.Margin     = new System.Windows.Forms.Padding(0);
-			this.splitContainer3.Name       = "splitContainer3";
+			this._headerStatusContainer.Dock       = System.Windows.Forms.DockStyle.Fill;
+			this._headerStatusContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+			this._headerStatusContainer.Location   = new System.Drawing.Point(0, 0);
+			this._headerStatusContainer.Margin     = new System.Windows.Forms.Padding(0);
+			this._headerStatusContainer.Name       = "_headerStatusContainer";
 			// 
-			// splitContainer3.Panel1
+			// _headerStatusContainer.Panel1
 			// 
-			this.splitContainer3.Panel1.Controls.Add(this._statusButton);
-			this.splitContainer3.Panel1MinSize = 10;
+			this._headerStatusContainer.Panel1.Controls.Add(this._statusButton);
+			this._headerStatusContainer.Panel1MinSize = 10;
 			// 
-			// splitContainer3.Panel2
+			// _headerStatusContainer.Panel2
 			// 
-			this.splitContainer3.Panel2.Controls.Add(this.splitContainer7);
-			this.splitContainer3.Size             = new System.Drawing.Size(471, 25);
-			this.splitContainer3.SplitterDistance = 25;
-			this.splitContainer3.TabIndex         = 0;
+			this._headerStatusContainer.Panel2.Controls.Add(this._headerContentContainer);
+			this._headerStatusContainer.Size             = new System.Drawing.Size(471, 25);
+			this._headerStatusContainer.SplitterDistance = 25;
+			this._headerStatusContainer.TabIndex         = 0;
 			// 
 			// _statusButton
 			// 
@@ -161,49 +167,82 @@ namespace TaskChecker.GuiControl
 			this._processStateMenu.Name = "contextMenuStrip1";
 			this._processStateMenu.Size = new System.Drawing.Size(61, 4);
 			// 
-			// splitContainer7
+			// _headerContentContainer
 			// 
-			this.splitContainer7.Dock       = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer7.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-			this.splitContainer7.Location   = new System.Drawing.Point(0, 0);
-			this.splitContainer7.Margin     = new System.Windows.Forms.Padding(0);
-			this.splitContainer7.Name       = "splitContainer7";
+			this._headerContentContainer.Dock       = System.Windows.Forms.DockStyle.Fill;
+			this._headerContentContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+			this._headerContentContainer.Location   = new System.Drawing.Point(0, 0);
+			this._headerContentContainer.Margin     = new System.Windows.Forms.Padding(0);
+			this._headerContentContainer.Name       = "_headerContentContainer";
 			// 
-			// splitContainer7.Panel1
+			// _headerContentContainer.Panel1
 			// 
-			this.splitContainer7.Panel1.Controls.Add(this._processTitle);
+			this._headerContentContainer.Panel1.Controls.Add(this._processTitleContainer);
 			// 
-			// splitContainer7.Panel2
+			// _headerContentContainer.Panel2
 			// 
-			this.splitContainer7.Panel2.Controls.Add(this._addProcessButton);
-			this.splitContainer7.Panel2.Controls.Add(this._memoButton);
-			this.splitContainer7.Panel2.Controls.Add(this._removeProcessButton);
-			this.splitContainer7.Panel2.Padding   = new System.Windows.Forms.Padding(2, 0, 2, 0);
-			this.splitContainer7.Size             = new System.Drawing.Size(442, 25);
-			this.splitContainer7.SplitterDistance = 359;
-			this.splitContainer7.TabIndex         = 1;
+			this._headerContentContainer.Panel2.Controls.Add(this._addProcessButton);
+			this._headerContentContainer.Panel2.Controls.Add(this._memoButton);
+			this._headerContentContainer.Panel2.Controls.Add(this._removeProcessButton);
+			this._headerContentContainer.Panel2.Padding   = new System.Windows.Forms.Padding(2, 0, 2, 0);
+			this._headerContentContainer.Size             = new System.Drawing.Size(442, 25);
+			this._headerContentContainer.SplitterDistance = 359;
+			this._headerContentContainer.TabIndex         = 1;
+			// 
+			// _processTitleContainer
+			// 
+			this._processTitleContainer.Dock            = System.Windows.Forms.DockStyle.Fill;
+			this._processTitleContainer.IsSplitterFixed = true;
+			this._processTitleContainer.Location        = new System.Drawing.Point(0, 0);
+			this._processTitleContainer.Margin          = new System.Windows.Forms.Padding(0);
+			this._processTitleContainer.Name            = "_processTitleContainer";
+			// 
+			// _processTitleContainer.Panel1
+			// 
+			this._processTitleContainer.Panel1.Controls.Add(this._processTitle);
+			// 
+			// _processTitleContainer.Panel2
+			// 
+			this._processTitleContainer.Panel2.Controls.Add(this._processTitleInputBox);
+			this._processTitleContainer.Panel2.Padding   = new System.Windows.Forms.Padding(0, 3, 0, 0);
+			this._processTitleContainer.Size             = new System.Drawing.Size(359, 25);
+			this._processTitleContainer.SplitterDistance = 170;
+			this._processTitleContainer.TabIndex         = 0;
 			// 
 			// _processTitle
 			// 
-			this._processTitle.Dock      = System.Windows.Forms.DockStyle.Fill;
-			this._processTitle.Font      = new System.Drawing.Font("ＭＳ ゴシック", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this._processTitle.Location  = new System.Drawing.Point(0, 0);
-			this._processTitle.Name      = "_processTitle";
-			this._processTitle.Size      = new System.Drawing.Size(359, 25);
-			this._processTitle.TabIndex  = 3;
-			this._processTitle.Text      = "TitleText";
-			this._processTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this._processTitle.Dock        =  System.Windows.Forms.DockStyle.Fill;
+			this._processTitle.Font        =  new System.Drawing.Font("ＭＳ ゴシック", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+			this._processTitle.Location    =  new System.Drawing.Point(0, 0);
+			this._processTitle.Name        =  "_processTitle";
+			this._processTitle.Size        =  new System.Drawing.Size(170, 25);
+			this._processTitle.TabIndex    =  3;
+			this._processTitle.Text        =  "TitleText";
+			this._processTitle.TextAlign   =  System.Drawing.ContentAlignment.MiddleLeft;
+			this._processTitle.Click       += new System.EventHandler(this._processTitle_Click);
+			this._processTitle.DoubleClick += new System.EventHandler(this._processTitle_DoubleClick);
+			// 
+			// _processTitleInputBox
+			// 
+			this._processTitleInputBox.Dock           =  System.Windows.Forms.DockStyle.Fill;
+			this._processTitleInputBox.Location       =  new System.Drawing.Point(0, 3);
+			this._processTitleInputBox.Name           =  "_processTitleInputBox";
+			this._processTitleInputBox.Size           =  new System.Drawing.Size(185, 19);
+			this._processTitleInputBox.TabIndex       =  0;
+			this._processTitleInputBox.Text           =  "TitleText";
+			this._processTitleInputBox.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this._processTitleInputBox_PreviewKeyDown);
 			// 
 			// _addProcessButton
 			// 
-			this._addProcessButton.BackgroundImage         = global::TaskChecker.Properties.Resources.add;
-			this._addProcessButton.BackgroundImageLayout   = System.Windows.Forms.ImageLayout.Center;
-			this._addProcessButton.Location                = new System.Drawing.Point(2, 0);
-			this._addProcessButton.Margin                  = new System.Windows.Forms.Padding(0);
-			this._addProcessButton.Name                    = "_addProcessButton";
-			this._addProcessButton.Size                    = new System.Drawing.Size(25, 25);
-			this._addProcessButton.TabIndex                = 2;
-			this._addProcessButton.UseVisualStyleBackColor = true;
+			this._addProcessButton.BackgroundImage         =  global::TaskChecker.Properties.Resources.add;
+			this._addProcessButton.BackgroundImageLayout   =  System.Windows.Forms.ImageLayout.Center;
+			this._addProcessButton.Location                =  new System.Drawing.Point(2, 0);
+			this._addProcessButton.Margin                  =  new System.Windows.Forms.Padding(0);
+			this._addProcessButton.Name                    =  "_addProcessButton";
+			this._addProcessButton.Size                    =  new System.Drawing.Size(25, 25);
+			this._addProcessButton.TabIndex                =  2;
+			this._addProcessButton.UseVisualStyleBackColor =  true;
+			this._addProcessButton.Click                   += new System.EventHandler(this._addProcessButton_Click);
 			// 
 			// _memoButton
 			// 
@@ -263,30 +302,39 @@ namespace TaskChecker.GuiControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode       = System.Windows.Forms.AutoScaleMode.Font;
-			this.Controls.Add(this.splitContainer1);
+			this.Controls.Add(this._rootContainer);
 			this.Name = "TaskListItem";
 			this.Size = new System.Drawing.Size(500, 300);
-			this.splitContainer1.Panel1.ResumeLayout(false);
-			this.splitContainer1.Panel2.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-			this.splitContainer1.ResumeLayout(false);
-			this.splitContainer2.Panel1.ResumeLayout(false);
-			this.splitContainer2.Panel2.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
-			this.splitContainer2.ResumeLayout(false);
-			this.splitContainer3.Panel1.ResumeLayout(false);
-			this.splitContainer3.Panel2.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
-			this.splitContainer3.ResumeLayout(false);
-			this.splitContainer7.Panel1.ResumeLayout(false);
-			this.splitContainer7.Panel2.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.splitContainer7)).EndInit();
-			this.splitContainer7.ResumeLayout(false);
+			this._rootContainer.Panel1.ResumeLayout(false);
+			this._rootContainer.Panel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this._rootContainer)).EndInit();
+			this._rootContainer.ResumeLayout(false);
+			this._headerContainer.Panel1.ResumeLayout(false);
+			this._headerContainer.Panel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this._headerContainer)).EndInit();
+			this._headerContainer.ResumeLayout(false);
+			this._headerStatusContainer.Panel1.ResumeLayout(false);
+			this._headerStatusContainer.Panel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this._headerStatusContainer)).EndInit();
+			this._headerStatusContainer.ResumeLayout(false);
+			this._headerContentContainer.Panel1.ResumeLayout(false);
+			this._headerContentContainer.Panel2.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this._headerContentContainer)).EndInit();
+			this._headerContentContainer.ResumeLayout(false);
+			this._processTitleContainer.Panel1.ResumeLayout(false);
+			this._processTitleContainer.Panel2.ResumeLayout(false);
+			this._processTitleContainer.Panel2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this._processTitleContainer)).EndInit();
+			this._processTitleContainer.ResumeLayout(false);
 			this._contentContainer.Panel1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this._contentContainer)).EndInit();
 			this._contentContainer.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
+
+		private System.Windows.Forms.TextBox _processTitleInputBox;
+
+		private System.Windows.Forms.SplitContainer _processTitleContainer;
 
 		private System.Windows.Forms.ContextMenuStrip _processStateMenu;
 
@@ -300,19 +348,19 @@ namespace TaskChecker.GuiControl
 
 		private System.Windows.Forms.Button _addProcessButton;
 
-		private System.Windows.Forms.SplitContainer splitContainer7;
+		private System.Windows.Forms.SplitContainer _headerContentContainer;
 
 		private System.Windows.Forms.RichTextBox _memoTextArea;
 
 		private System.Windows.Forms.SplitContainer _contentContainer;
 
-		private System.Windows.Forms.SplitContainer splitContainer3;
+		private System.Windows.Forms.SplitContainer _headerStatusContainer;
 
-		private System.Windows.Forms.SplitContainer splitContainer2;
+		private System.Windows.Forms.SplitContainer _headerContainer;
 
 		private System.Windows.Forms.Button _expandButton;
 
-		private System.Windows.Forms.SplitContainer splitContainer1;
+		private System.Windows.Forms.SplitContainer _rootContainer;
 
 		#endregion
 	}
