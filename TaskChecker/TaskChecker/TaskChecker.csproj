@@ -47,6 +47,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GuiControl\ProcessListView\ProcessListView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GuiControl\ProcessListView\ProcessListView.Designer.cs">
+      <DependentUpon>ProcessListView.cs</DependentUpon>
+    </Compile>
     <Compile Include="GuiControl\TaskListView\TaskListItem.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -79,6 +85,9 @@
     <Compile Include="Utilities\ApplicationUtility.cs" />
     <Compile Include="Utilities\Constants.cs" />
     <Compile Include="Utilities\Pair.cs" />
+    <EmbeddedResource Include="GuiControl\ProcessListView\ProcessListView.resx">
+      <DependentUpon>ProcessListView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GuiControl\TaskListView\TaskListItem.resx">
       <DependentUpon>TaskListItem.cs</DependentUpon>
     </EmbeddedResource>
