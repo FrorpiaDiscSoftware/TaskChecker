@@ -9,6 +9,8 @@ namespace TaskChecker.GuiControl
 {
 	public partial class TaskListItem : UserControl
 	{
+		private const int TITLE_HEIGHT = 25;//作業工程タイトルの高さ
+		//-----------------------------------------------------------------------------
 		private bool                                    _isSelected            = false;                                        //選択されているかどうかのフラグ(trueで選択中)
 		private bool                                    _isPressControlKey     = false;                                        //Controlキーが押されているかどうか(trueで押されている)
 		private bool                                    _isPressShiftKey       = false;                                        //Shiftキーが押されているかどうか(trueで押されている)
@@ -17,18 +19,19 @@ namespace TaskChecker.GuiControl
 		private Dictionary<TaskState,ToolStripMenuItem> _processStateMenuItems = new Dictionary<TaskState,ToolStripMenuItem>();//作業工程の進行状態設定メニュー項目リスト
 		private List<ListItemContainer<TaskListItem>>   _children              = new List<ListItemContainer<TaskListItem>>();  //子の作業工程リスト
 		//-----------------------------------------------------------------------------
-		public bool                 isSelected                 { get => _isSelected; set => SetSelected(value); }//選択されているかどうかのフラグ(trueで選択中)
-		public bool                 isPressControlKey          { get => _isPressControlKey; }//Controlキーが押されているかどうか(trueで押されている)
-		public bool                 isPressShiftKey            { get => _isPressShiftKey; }//Shiftキーが押されているかどうか(trueで押されている)
-		public bool                 isExpanded                 { get => !_contentContainer.Panel2Collapsed; set => SetExpanded(value);       }//子の作業プロセスが展開表示されているかどうか
-		public bool                 isEnableMemoArea           { get => !_contentContainer.Panel1Collapsed; set => SetEnableMemoArea(value); }//メモ書き用テキストエリアの表示が有効かどうか
-		public bool                 isProcessTitleEditMode     { get => !_processTitleContainer.Panel2Collapsed; }//作業工程タイトルテキストの編集モード状態
-		public int                  id                         { get => _id; }//このコントロールのID(Indexに使用)
-		public TaskState            processState               { get => _processState; set => SetProcessState(value); }//作業工程の進行状態
-		public string               processTitle               { get => _processTitle.Text; set => SetProcessTitle(value); }//作業工程のタイトルテキスト
-		public string               memoContent                { get => _memoTextArea.Text; set => _memoTextArea.Text = value; }//メモ書き用テキストエリアの内容
-		public Action<TaskListItem> onClickRemoveProcessButton { get; set; } = null;//この作業工程の削除ボタン押下イベント
-		public Action<TaskListItem> onClickSelected            { get; set; } = null;//クリック操作による選択イベント
+		public bool                      isSelected                 { get => _isSelected; set => SetSelected(value); }//選択されているかどうかのフラグ(trueで選択中)
+		public bool                      isPressControlKey          { get => _isPressControlKey; }//Controlキーが押されているかどうか(trueで押されている)
+		public bool                      isPressShiftKey            { get => _isPressShiftKey; }//Shiftキーが押されているかどうか(trueで押されている)
+		public bool                      isExpanded                 { get => !_contentContainer.Panel2Collapsed; set => SetExpanded(value);       }//子の作業プロセスが展開表示されているかどうか
+		public bool                      isEnableMemoArea           { get => !_contentContainer.Panel1Collapsed; set => SetEnableMemoArea(value); }//メモ書き用テキストエリアの表示が有効かどうか
+		public bool                      isProcessTitleEditMode     { get => !_processTitleContainer.Panel2Collapsed; }//作業工程タイトルテキストの編集モード状態
+		public int                       id                         { get => _id; }//このコントロールのID(Indexに使用)
+		public TaskState                 processState               { get => _processState; set => SetProcessState(value); }//作業工程の進行状態
+		public string                    processTitle               { get => _processTitle.Text; set => SetProcessTitle(value); }//作業工程のタイトルテキスト
+		public string                    memoContent                { get => _memoTextArea.Text; set => _memoTextArea.Text = value; }//メモ書き用テキストエリアの内容
+		public Action<TaskListItem>      onClickRemoveProcessButton { get; set; } = null;//この作業工程の削除ボタン押下イベント
+		public Action<TaskListItem>      onClickSelected            { get; set; } = null;//クリック操作による選択イベント
+		public Action<TaskListItem,Size> onResizeRequest            { get; set; } = null;//リサイズ発生とリクエストイベント※親はこのイベントに応じて自身のサイズを変える必要あり。
 		//-----------------------------------------------------------------------------
 		
 		
@@ -86,6 +89,12 @@ namespace TaskChecker.GuiControl
 			/// クリック操作による選択イベント
 			/// </summary>
 			public Action<TaskListItem> onClickSelected = null;
+
+			/// <summary>
+			/// リサイズ発生とリクエストイベント<br />
+			/// ※親はこのイベントに応じて自身のサイズを変える必要あり。
+			/// </summary>
+			public Action<TaskListItem,Size> onResizeRequest = null;
 		}
 		
 		
@@ -110,14 +119,16 @@ namespace TaskChecker.GuiControl
 			
 			SetupProcessStateMenu();
 			
+			onClickRemoveProcessButton = pEntity.onClickRemoveProcessButton;
+			onClickSelected            = pEntity.onClickSelected;
+			onResizeRequest            = pEntity.onResizeRequest;
+			
 			SetExpanded(pEntity.isExpanded);
 			SetEnableMemoArea(pEntity.isEnableMemoArea);
 			SetProcessState(pEntity.processState);
 			SetProcessTitle(pEntity.processTitle);
 
 			_id                        = pEntity.id;
-			onClickRemoveProcessButton = pEntity.onClickRemoveProcessButton;
-			onClickSelected            = pEntity.onClickSelected;
 			_memoTextArea.Text         = pEntity.memoContent;
 
 			if ( pEntity.children != null )
@@ -188,6 +199,8 @@ namespace TaskChecker.GuiControl
 			}
 			
 			fItemEntity.item.Setup((pEntity != null)? pEntity : new Entity { id = _children.Count - 1 });
+
+			ReSize(new Size( Size.Width , Size.Height + TITLE_HEIGHT ));
 		}
 
 		/// <summary>
@@ -196,9 +209,10 @@ namespace TaskChecker.GuiControl
 		/// <param name="pIndex">削除するIndex</param>
 		public void RemoveProcessItem( int pIndex )
 		{
-			if ( _children.Count <= 0 || pIndex >= _children.Count ) { return; }
+			if ( _children.Count <= 0 || pIndex < 0 || pIndex >= _children.Count ) { return; }
 
 			ListItemContainer<TaskListItem> fJoinItemContainer = (pIndex + 1 < _children.Count)? _children[pIndex + 1] : null;
+			Size                            fRemoveItemSize    = _children[pIndex].item.Size;
 			
 			if ( _children.Count <= 1 ) { ClearProcessItem(); return; }
 
@@ -225,6 +239,8 @@ namespace TaskChecker.GuiControl
 				_children[pIndex - 1].SetNext(fJoinItemContainer);
 				_children.RemoveAt(pIndex);
 			}
+			
+			ReSize(new Size(Size.Width,Size.Height - fRemoveItemSize.Height));
 		}
 
 		/// <summary>
@@ -232,8 +248,23 @@ namespace TaskChecker.GuiControl
 		/// </summary>
 		public void ClearProcessItem()
 		{
+			SetExpanded(false);
 			_children.Clear();
 			_contentContainer.Panel2.Controls.Clear();
+		}
+		
+		/// <summary>
+		/// このコントロールのリサイズを行なう関数<br />
+		/// ※Dock状態に応じて対応方法を調整します。<br />
+		/// ※自身でサイズ変更を行なう場合は本関数を必ず使用してください。
+		/// </summary>
+		/// <param name="pSize">新しいサイズ</param>
+		private void ReSize( Size pSize )
+		{
+			if ( pSize == Size ) { return; }
+			if ( pSize.Height < TITLE_HEIGHT ) { pSize.Height = TITLE_HEIGHT; }
+			if ( Dock != DockStyle.Fill ) { Size = pSize; } else { onResizeRequest.Invoke(this,pSize); }
+			Update();
 		}
 		
 		
@@ -265,11 +296,16 @@ namespace TaskChecker.GuiControl
 		/// <param name="pIsExpanded">展開表示するかどうか(trueで展開)</param>
 		private void SetExpanded( bool pIsExpanded )
 		{
+			bool fIsNoChange = pIsExpanded == isExpanded;//展開状態に変化が無いかどうか(trueで変化なし)
+			Size fPanel2Size = (_contentContainer.Panel2.Controls.Count > 0)? _contentContainer.Panel2.Controls[0].Size : Size.Empty;
+			
 			_contentContainer.Panel2Collapsed = !pIsExpanded;
 			
 			_expandButton.BackgroundImage = (!pIsExpanded)? Resources.arrowStateBlueRight : Resources.arrowStateBlueExpanded;
 			
 			_contentContainer.Visible = (!_contentContainer.Panel1Collapsed || !_contentContainer.Panel2Collapsed);
+			
+			if ( !fIsNoChange ) { ReSize(new Size(Size.Width, (pIsExpanded)? Size.Height + fPanel2Size.Height : Size.Height - fPanel2Size.Height)); }
 		}
 
 		/// <summary>
@@ -278,11 +314,16 @@ namespace TaskChecker.GuiControl
 		/// <param name="pIsEnableMemoArea">メモ書きエリアが有効かどうか(trueで有効)</param>
 		private void SetEnableMemoArea( bool pIsEnableMemoArea )
 		{
+			bool fIsNoChange = pIsEnableMemoArea == isEnableMemoArea;//メモ書きテキストエリアの展開状態に変化が無いかどうか(trueで変化なし)
+			Size fPanel1Size = _memoTextArea.Size;//※Panel1にはテキストエリアしかないので、テキストエリアを見るだけでOK。
+			
 			_contentContainer.Panel1Collapsed = !pIsEnableMemoArea;
 
 			_memoButton.FlatStyle = (!pIsEnableMemoArea)? FlatStyle.Standard : FlatStyle.Flat;
 			
 			_contentContainer.Visible = (!_contentContainer.Panel1Collapsed || !_contentContainer.Panel2Collapsed);
+			
+			if ( !fIsNoChange ) { ReSize(new Size(Size.Width, (pIsEnableMemoArea)? Size.Height + fPanel1Size.Height : Size.Height - fPanel1Size.Height)); }
 		}
 
 		/// <summary>

@@ -12,9 +12,10 @@ namespace TaskChecker.GuiControl
 	{
 		private Pair<ListItemT,ListItemContainer<ListItemT>> _containerData = new Pair<ListItemT,ListItemContainer<ListItemT>>();//SplitContainerに登録されているコントロールペア
 		//-----------------------------------------------------------------------------
-		public ListItemT                    item           { get => _containerData.first;  }//このContainerに登録されているリスト項目
-		public ListItemContainer<ListItemT> next           { get => _containerData.second; }//次のListItemContainer
-		public Orientation                  splitDirection { get => _container.Orientation; set => _container.Orientation = value; }//分割方向
+		public ListItemT                    item                { get => _containerData.first;  }//このContainerに登録されているリスト項目
+		public ListItemContainer<ListItemT> next                { get => _containerData.second; }//次のListItemContainer
+		public Orientation                  splitDirection      { get => _container.Orientation; set => _container.Orientation = value; }//分割方向
+		public FixedPanel                   containerFixedPanel { get => _container.FixedPanel;  set => _container.FixedPanel  = value; }//パネルのサイズ変更ロック設定
 		//-----------------------------------------------------------------------------
 		
 		

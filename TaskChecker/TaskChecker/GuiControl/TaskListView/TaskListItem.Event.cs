@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace TaskChecker.GuiControl
@@ -10,6 +11,7 @@ namespace TaskChecker.GuiControl
 		/// </summary>
 		private void _expandButton_Click( object pSender , EventArgs pEventArgs )
 		{
+			if ( _children.Count <= 0 ) { return; }
 			SetExpanded(!isExpanded);
 		}
 		
@@ -84,6 +86,14 @@ namespace TaskChecker.GuiControl
 							_children[i].item.SetSelected(false);
 						}
 					}
+				},
+				onResizeRequest = ( pItem, pSize ) =>
+				{
+					if ( pItem._id - 1 >= 0 ) { _children[pItem._id - 1].containerFixedPanel = FixedPanel.Panel1; }
+					_children[pItem._id].containerFixedPanel = FixedPanel.Panel2;
+					ReSize(new Size(Size.Width, Size.Height + (pSize.Height - pItem.Size.Height)));
+					_children[pItem._id].containerFixedPanel = FixedPanel.None;
+					if ( pItem._id - 1 >= 0 ) { _children[pItem._id - 1].containerFixedPanel = FixedPanel.None; }
 				},
 			});
 		}
