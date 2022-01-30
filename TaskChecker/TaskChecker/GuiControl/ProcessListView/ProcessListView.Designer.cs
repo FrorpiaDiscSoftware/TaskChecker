@@ -73,21 +73,23 @@ namespace TaskChecker.GuiControl
             // 
             // _addToolButton
             // 
-            this._addToolButton.DisplayStyle          = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this._addToolButton.Image                 = global::TaskChecker.Properties.Resources.add;
-            this._addToolButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this._addToolButton.Name                  = "_addToolButton";
-            this._addToolButton.Size                  = new System.Drawing.Size(23, 22);
-            this._addToolButton.Text                  = "toolStripButton1";
+            this._addToolButton.DisplayStyle          =  System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this._addToolButton.Image                 =  global::TaskChecker.Properties.Resources.add;
+            this._addToolButton.ImageTransparentColor =  System.Drawing.Color.Magenta;
+            this._addToolButton.Name                  =  "_addToolButton";
+            this._addToolButton.Size                  =  new System.Drawing.Size(23, 22);
+            this._addToolButton.Text                  =  "toolStripButton1";
+            this._addToolButton.Click                 += new System.EventHandler(this._addToolButton_Click);
             // 
             // _removeToolButton
             // 
-            this._removeToolButton.DisplayStyle          = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this._removeToolButton.Image                 = global::TaskChecker.Properties.Resources.remove;
-            this._removeToolButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this._removeToolButton.Name                  = "_removeToolButton";
-            this._removeToolButton.Size                  = new System.Drawing.Size(23, 22);
-            this._removeToolButton.Text                  = "toolStripButton2";
+            this._removeToolButton.DisplayStyle          =  System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this._removeToolButton.Image                 =  global::TaskChecker.Properties.Resources.remove;
+            this._removeToolButton.ImageTransparentColor =  System.Drawing.Color.Magenta;
+            this._removeToolButton.Name                  =  "_removeToolButton";
+            this._removeToolButton.Size                  =  new System.Drawing.Size(23, 22);
+            this._removeToolButton.Text                  =  "toolStripButton2";
+            this._removeToolButton.Click                 += new System.EventHandler(this._removeToolButton_Click);
             // 
             // ProcessListView
             // 

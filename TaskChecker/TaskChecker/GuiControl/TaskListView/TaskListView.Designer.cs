@@ -30,20 +30,15 @@ namespace TaskChecker.GuiControl
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this._rootContainer           = new System.Windows.Forms.SplitContainer();
-			this.splitContainer1          = new System.Windows.Forms.SplitContainer();
-			this._headerStatusContainer   = new System.Windows.Forms.SplitContainer();
-			this._statusButton            = new System.Windows.Forms.Button();
-			this._taskTitleContainer      = new System.Windows.Forms.SplitContainer();
-			this._taskTitle               = new System.Windows.Forms.Label();
-			this._taskTitleInputBox       = new System.Windows.Forms.TextBox();
-			this._processContainer        = new System.Windows.Forms.SplitContainer();
-			this._processToolBar          = new System.Windows.Forms.ToolStrip();
-			this._addProcessToolButton    = new System.Windows.Forms.ToolStripButton();
-			this._removeProcessToolButton = new System.Windows.Forms.ToolStripButton();
+			this._rootContainer         = new System.Windows.Forms.SplitContainer();
+			this.splitContainer1        = new System.Windows.Forms.SplitContainer();
+			this._headerStatusContainer = new System.Windows.Forms.SplitContainer();
+			this._statusButton          = new System.Windows.Forms.Button();
+			this._taskTitleContainer    = new System.Windows.Forms.SplitContainer();
+			this._taskTitle             = new System.Windows.Forms.Label();
+			this._taskTitleInputBox     = new System.Windows.Forms.TextBox();
 			((System.ComponentModel.ISupportInitialize)(this._rootContainer)).BeginInit();
 			this._rootContainer.Panel1.SuspendLayout();
-			this._rootContainer.Panel2.SuspendLayout();
 			this._rootContainer.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
@@ -56,10 +51,6 @@ namespace TaskChecker.GuiControl
 			this._taskTitleContainer.Panel1.SuspendLayout();
 			this._taskTitleContainer.Panel2.SuspendLayout();
 			this._taskTitleContainer.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this._processContainer)).BeginInit();
-			this._processContainer.Panel1.SuspendLayout();
-			this._processContainer.SuspendLayout();
-			this._processToolBar.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// _rootContainer
@@ -72,11 +63,6 @@ namespace TaskChecker.GuiControl
 			// _rootContainer.Panel1
 			// 
 			this._rootContainer.Panel1.Controls.Add(this.splitContainer1);
-			// 
-			// _rootContainer.Panel2
-			// 
-			this._rootContainer.Panel2.AutoScroll = true;
-			this._rootContainer.Panel2.Controls.Add(this._processContainer);
 			this._rootContainer.Size             = new System.Drawing.Size(500, 450);
 			this._rootContainer.SplitterDistance = 233;
 			this._rootContainer.TabIndex         = 0;
@@ -169,54 +155,6 @@ namespace TaskChecker.GuiControl
 			this._taskTitleInputBox.TabIndex = 1;
 			this._taskTitleInputBox.Text     = "TitleText";
 			// 
-			// _processContainer
-			// 
-			this._processContainer.Dock            = System.Windows.Forms.DockStyle.Fill;
-			this._processContainer.FixedPanel      = System.Windows.Forms.FixedPanel.Panel1;
-			this._processContainer.IsSplitterFixed = true;
-			this._processContainer.Location        = new System.Drawing.Point(0, 0);
-			this._processContainer.Margin          = new System.Windows.Forms.Padding(0);
-			this._processContainer.Name            = "_processContainer";
-			this._processContainer.Orientation     = System.Windows.Forms.Orientation.Horizontal;
-			// 
-			// _processContainer.Panel1
-			// 
-			this._processContainer.Panel1.Controls.Add(this._processToolBar);
-			// 
-			// _processContainer.Panel2
-			// 
-			this._processContainer.Panel2.Padding   = new System.Windows.Forms.Padding(25, 0, 0, 0);
-			this._processContainer.Size             = new System.Drawing.Size(500, 213);
-			this._processContainer.SplitterDistance = 25;
-			this._processContainer.TabIndex         = 0;
-			// 
-			// _processToolBar
-			// 
-			this._processToolBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { this._addProcessToolButton, this._removeProcessToolButton });
-			this._processToolBar.Location = new System.Drawing.Point(0, 0);
-			this._processToolBar.Name     = "_processToolBar";
-			this._processToolBar.Size     = new System.Drawing.Size(500, 25);
-			this._processToolBar.TabIndex = 0;
-			this._processToolBar.Text     = "toolStrip1";
-			// 
-			// _addProcessToolButton
-			// 
-			this._addProcessToolButton.DisplayStyle          = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this._addProcessToolButton.Image                 = global::TaskChecker.Properties.Resources.add;
-			this._addProcessToolButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this._addProcessToolButton.Name                  = "_addProcessToolButton";
-			this._addProcessToolButton.Size                  = new System.Drawing.Size(23, 22);
-			this._addProcessToolButton.Text                  = "toolStripButton1";
-			// 
-			// _removeProcessToolButton
-			// 
-			this._removeProcessToolButton.DisplayStyle          = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this._removeProcessToolButton.Image                 = global::TaskChecker.Properties.Resources.remove;
-			this._removeProcessToolButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this._removeProcessToolButton.Name                  = "_removeProcessToolButton";
-			this._removeProcessToolButton.Size                  = new System.Drawing.Size(23, 22);
-			this._removeProcessToolButton.Text                  = "toolStripButton2";
-			// 
 			// TaskListView
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -225,7 +163,6 @@ namespace TaskChecker.GuiControl
 			this.Name = "TaskListView";
 			this.Size = new System.Drawing.Size(500, 450);
 			this._rootContainer.Panel1.ResumeLayout(false);
-			this._rootContainer.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this._rootContainer)).EndInit();
 			this._rootContainer.ResumeLayout(false);
 			this.splitContainer1.Panel1.ResumeLayout(false);
@@ -240,22 +177,8 @@ namespace TaskChecker.GuiControl
 			this._taskTitleContainer.Panel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this._taskTitleContainer)).EndInit();
 			this._taskTitleContainer.ResumeLayout(false);
-			this._processContainer.Panel1.ResumeLayout(false);
-			this._processContainer.Panel1.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this._processContainer)).EndInit();
-			this._processContainer.ResumeLayout(false);
-			this._processToolBar.ResumeLayout(false);
-			this._processToolBar.PerformLayout();
 			this.ResumeLayout(false);
 		}
-
-		private System.Windows.Forms.ToolStripButton _addProcessToolButton;
-
-		private System.Windows.Forms.ToolStrip _processToolBar;
-
-		private System.Windows.Forms.ToolStripButton _removeProcessToolButton;
-
-		private System.Windows.Forms.SplitContainer _processContainer;
 
 		private System.Windows.Forms.TextBox _taskTitleInputBox;
 

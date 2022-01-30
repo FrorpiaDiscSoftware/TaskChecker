@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace TaskChecker.GuiControl
 {
     public partial class ProcessListView : UserControl
     {
-        private const int TITLE_HEIGHT = 25;//作業工程タイトルの高さ
+        private bool                                  _isPressControlKey = false;                                      //Controlキーが押されているかどうか(trueで押されている)
+        private bool                                  _isPressShiftKey   = false;                                      //Shiftキーが押されているかどうか(trueで押されている)
+        private int                                   _id                = 0;                                          //このコントロールのID(Indexに使用)
+        private List<ListItemContainer<TaskListItem>> _children          = new List<ListItemContainer<TaskListItem>>();//子の作業工程リスト
         //-----------------------------------------------------------------------------
-        private int                                   _id       = 0;                                          //このコントロールのID(Indexに使用)
-        private List<ListItemContainer<TaskListItem>> _children = new List<ListItemContainer<TaskListItem>>();//子の作業工程リスト
-        //-----------------------------------------------------------------------------
-        public int                          id              { get => _id; }//このコントロールのID(Indexに使用)
-        public Action<ProcessListView,Size> onResizeRequest { get; set; } = null;//リサイズ発生とリクエストイベント※親はこのイベントに応じて自身のサイズを変える必要あり。
+        public bool isPressControlKey { get => _isPressControlKey; }//Controlキーが押されているかどうか(trueで押されている)
+        public bool isPressShiftKey   { get => _isPressShiftKey; }//Shiftキーが押されているかどうか(trueで押されている)
+        public int  id                { get => _id; }//このコントロールのID(Indexに使用)
         //-----------------------------------------------------------------------------
 
 
@@ -29,12 +31,11 @@ namespace TaskChecker.GuiControl
             /// このコントロールのID(Indexに使用)
             /// </summary>
             public int id = 0;
-            
+
             /// <summary>
-            /// リサイズ発生とリクエストイベント<br />
-            /// ※親はこのイベントに応じて自身のサイズを変える必要あり。
+            /// 子の作業工程リスト
             /// </summary>
-            public Action<ProcessListView,Size> onResizeRequest = null;
+            public List<TaskListItem.Entity> children = null;
         }
 
 
@@ -71,23 +72,108 @@ namespace TaskChecker.GuiControl
         {
             if ( pEntity == null ) { return; }
             
-            onResizeRequest = pEntity.onResizeRequest;
-            
             _id = pEntity.id;
+
+            if ( pEntity.children != null )
+            {
+                ClearProcessItem();
+                pEntity.children.ForEach(value => { AddProcessItem(value); });
+            }
+
+            KeyDown += ( pSender, pArgs ) =>
+            {
+                if ( pArgs.Control ) { _isPressControlKey = true; }
+                if ( pArgs.Shift   ) { _isPressShiftKey   = true; }
+            };
+			
+            KeyUp += ( pSender, pArgs ) =>
+            {
+                if ( pArgs.Control ) { _isPressControlKey = false; }
+                if ( pArgs.Shift   ) { _isPressShiftKey   = false; }
+            };
         }
-		
+
         /// <summary>
-        /// このコントロールのリサイズを行なう関数<br />
-        /// ※Dock状態に応じて対応方法を調整します。<br />
-        /// ※自身でサイズ変更を行なう場合は本関数を必ず使用してください。
+        /// 作業工程を追加する関数
         /// </summary>
-        /// <param name="pSize">新しいサイズ</param>
-        private void ReSize( Size pSize )
+        /// <param name="pEntity">作業工程の初期設定</param>
+        public void AddProcessItem( TaskListItem.Entity pEntity = null )
         {
-            if ( pSize == Size ) { return; }
-            if ( pSize.Height < TITLE_HEIGHT ) { pSize.Height = TITLE_HEIGHT; }
-            if ( Dock != DockStyle.Fill ) { Size = pSize; } else { onResizeRequest.Invoke(this, pSize); }
+            ListItemContainer<TaskListItem>.Entity fItemEntity = new ListItemContainer<TaskListItem>.Entity();
+			
+            fItemEntity.item = new TaskListItem();
+
             Update();
+			
+            if ( _rootContainer.Panel2.Controls.Count <= 0 )
+            {
+                _children.Clear();
+                _children.Add(new ListItemContainer<TaskListItem>());
+                _rootContainer.Panel2.Controls.Add(_children.Last());
+                _children.Last().Dock = DockStyle.Top;
+                _children.Last().Update();
+                _children.Last().Setup(fItemEntity);
+                _rootContainer.Panel2.Controls[0].Size = new Size(Size.Width, fItemEntity.item.Size.Height);
+                _rootContainer.Panel2.Controls[0].Update();
+            }
+            else
+            {
+                _children.Last().SetNext(fItemEntity);
+                _children.Add(_children.Last().next);
+                _rootContainer.Panel2.Controls[0].Size = new Size(Size.Width, _rootContainer.Panel2.Controls[0].Size.Height + fItemEntity.item.Size.Height);
+                _rootContainer.Panel2.Controls[0].Update();
+            }
+			
+            fItemEntity.item.Setup((pEntity != null)? pEntity : new TaskListItem.Entity { id = _children.Count - 1 });
+        }
+
+        /// <summary>
+        /// 指定したIndexの作業工程を削除する関数
+        /// </summary>
+        /// <param name="pIndex">削除するIndex</param>
+        public void RemoveProcessItem( int pIndex )
+        {
+            if ( _children.Count <= 0 || pIndex < 0 || pIndex >= _children.Count ) { return; }
+
+            ListItemContainer<TaskListItem> fJoinItemContainer = (pIndex + 1 < _children.Count)? _children[pIndex + 1] : null;
+            Size                            fRemoveItemSize    = _children[pIndex].item.Size;
+			
+            if ( _children.Count <= 1 ) { ClearProcessItem(); return; }
+
+            //▽ID調整
+            if ( pIndex + 1 < _children.Count )
+            {
+                for( int i = pIndex + 1; i < _children.Count; i++ )
+                {
+                    _children[i].item.id--;
+                }
+            }
+
+            //▽削除処理
+            if ( pIndex == 0 )
+            {
+                fJoinItemContainer.Dock = DockStyle.Top;
+                fJoinItemContainer.Update();
+                _rootContainer.Panel2.Controls.Clear();
+                _rootContainer.Panel2.Controls.Add(fJoinItemContainer);
+                _children.RemoveAt(pIndex);
+            }
+            else
+            {
+                _children[pIndex - 1].SetNext(fJoinItemContainer);
+                _children.RemoveAt(pIndex);
+                _rootContainer.Panel2.Controls[0].Size = new Size(Size.Width, _rootContainer.Panel2.Controls[0].Size.Height - fRemoveItemSize.Height);
+                _rootContainer.Panel2.Controls[0].Update();
+            }
+        }
+
+        /// <summary>
+        /// 作業工程を初期化(クリア)する関数
+        /// </summary>
+        public void ClearProcessItem()
+        {
+            _children.Clear();
+            _rootContainer.Panel2.Controls.Clear();
         }
     }
 }

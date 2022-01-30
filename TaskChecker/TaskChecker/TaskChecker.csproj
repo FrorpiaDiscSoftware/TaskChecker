@@ -53,6 +53,7 @@
     <Compile Include="GuiControl\ProcessListView\ProcessListView.Designer.cs">
       <DependentUpon>ProcessListView.cs</DependentUpon>
     </Compile>
+    <Compile Include="GuiControl\ProcessListView\ProcessListView.Event.cs" />
     <Compile Include="GuiControl\TaskListView\TaskListItem.cs">
       <SubType>UserControl</SubType>
     </Compile>
