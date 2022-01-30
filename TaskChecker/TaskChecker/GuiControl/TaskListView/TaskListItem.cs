@@ -25,7 +25,7 @@ namespace TaskChecker.GuiControl
 		public bool                      isExpanded                 { get => !_contentContainer.Panel2Collapsed; set => SetExpanded(value);       }//子の作業プロセスが展開表示されているかどうか
 		public bool                      isEnableMemoArea           { get => !_contentContainer.Panel1Collapsed; set => SetEnableMemoArea(value); }//メモ書き用テキストエリアの表示が有効かどうか
 		public bool                      isProcessTitleEditMode     { get => !_processTitleContainer.Panel2Collapsed; }//作業工程タイトルテキストの編集モード状態
-		public int                       id                         { get => _id; }//このコントロールのID(Indexに使用)
+		public int                       id                         { get => _id; set => _id = value; }//このコントロールのID(Indexに使用)
 		public TaskState                 processState               { get => _processState; set => SetProcessState(value); }//作業工程の進行状態
 		public string                    processTitle               { get => _processTitle.Text; set => SetProcessTitle(value); }//作業工程のタイトルテキスト
 		public string                    memoContent                { get => _memoTextArea.Text; set => _memoTextArea.Text = value; }//メモ書き用テキストエリアの内容
@@ -197,10 +197,10 @@ namespace TaskChecker.GuiControl
 				_children.Last().SetNext(fItemEntity);
 				_children.Add(_children.Last().next);
 			}
+
+			ReSize(new Size( Size.Width , Size.Height + fItemEntity.item.Size.Height ));
 			
 			fItemEntity.item.Setup((pEntity != null)? pEntity : new Entity { id = _children.Count - 1 });
-
-			ReSize(new Size( Size.Width , Size.Height + TITLE_HEIGHT ));
 		}
 
 		/// <summary>
