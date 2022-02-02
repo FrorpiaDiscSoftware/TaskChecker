@@ -12,12 +12,11 @@ namespace TaskChecker.GuiControl
         private void _addToolButton_Click( object pSender, EventArgs pEventArgs )
         {
             AddProcessItem(new TaskListItem.Entity {
-                id                         = _children.Count,
-                isEnableMemoArea           = false,
-                isExpanded                 = false,
-                processState               = TaskState.NOT_WORKING,
-                onClickRemoveProcessButton = value => { RemoveProcessItem(value.id); },
-                onClickSelected = value =>
+                id               = _children.Count,
+                isEnableMemoArea = false,
+                isExpanded       = false,
+                processState     = TaskState.NOT_WORKING,
+                onClickSelected  = value =>
                 {
                     if ( _isPressControlKey ) { return; }
 

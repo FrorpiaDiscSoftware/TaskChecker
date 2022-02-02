@@ -15,9 +15,12 @@ namespace TaskChecker.GuiControl
 		private bool                                    _isPressControlKey     = false;                                        //Controlキーが押されているかどうか(trueで押されている)
 		private bool                                    _isPressShiftKey       = false;                                        //Shiftキーが押されているかどうか(trueで押されている)
 		private int                                     _id                    = 0;                                            //このコントロールのID(Indexに使用)
+		private string                                  _guid                  = Guid.NewGuid().ToString("N");                 //このコントロールのGUID※ユニークなID。インスタンス化後は変更不可。
 		private TaskState                               _processState          = TaskState.NOT_WORKING;                        //作業工程の進行状態
 		private Dictionary<TaskState,ToolStripMenuItem> _processStateMenuItems = new Dictionary<TaskState,ToolStripMenuItem>();//作業工程の進行状態設定メニュー項目リスト
 		private List<ListItemContainer<TaskListItem>>   _children              = new List<ListItemContainer<TaskListItem>>();  //子の作業工程リスト
+		private Dictionary<string,TaskListItem>         _selections            = new Dictionary<string,TaskListItem>();        //現在選択している作業工程リスト(キー：GUID)
+		private TaskListItem                            _lastSelectedItem      = null;                                         //最後に選択した作業工程項目
 		//-----------------------------------------------------------------------------
 		public bool                      isSelected                 { get => _isSelected; set => SetSelected(value); }//選択されているかどうかのフラグ(trueで選択中)
 		public bool                      isPressControlKey          { get => _isPressControlKey; }//Controlキーが押されているかどうか(trueで押されている)
@@ -26,10 +29,10 @@ namespace TaskChecker.GuiControl
 		public bool                      isEnableMemoArea           { get => !_contentContainer.Panel1Collapsed; set => SetEnableMemoArea(value); }//メモ書き用テキストエリアの表示が有効かどうか
 		public bool                      isProcessTitleEditMode     { get => !_processTitleContainer.Panel2Collapsed; }//作業工程タイトルテキストの編集モード状態
 		public int                       id                         { get => _id; set => _id = value; }//このコントロールのID(Indexに使用)
+		public string                    guid                       { get => _guid; }//このコントロールのGUID
 		public TaskState                 processState               { get => _processState; set => SetProcessState(value); }//作業工程の進行状態
 		public string                    processTitle               { get => _processTitle.Text; set => SetProcessTitle(value); }//作業工程のタイトルテキスト
 		public string                    memoContent                { get => _memoTextArea.Text; set => _memoTextArea.Text = value; }//メモ書き用テキストエリアの内容
-		public Action<TaskListItem>      onClickRemoveProcessButton { get; set; } = null;//この作業工程の削除ボタン押下イベント
 		public Action<TaskListItem>      onClickSelected            { get; set; } = null;//クリック操作による選択イベント
 		public Action<TaskListItem,Size> onResizeRequest            { get; set; } = null;//リサイズ発生とリクエストイベント※親はこのイベントに応じて自身のサイズを変える必要あり。
 		//-----------------------------------------------------------------------------
@@ -81,11 +84,6 @@ namespace TaskChecker.GuiControl
 			public List<Entity> children = null;
 
 			/// <summary>
-			/// この作業工程の削除ボタン押下イベント
-			/// </summary>
-			public Action<TaskListItem> onClickRemoveProcessButton = null;
-
-			/// <summary>
 			/// クリック操作による選択イベント
 			/// </summary>
 			public Action<TaskListItem> onClickSelected = null;
@@ -117,11 +115,12 @@ namespace TaskChecker.GuiControl
 		{
 			if ( pEntity == null ) { return; }
 			
+			ClearChildSelections();
+			
 			SetupProcessStateMenu();
 			
-			onClickRemoveProcessButton = pEntity.onClickRemoveProcessButton;
-			onClickSelected            = pEntity.onClickSelected;
-			onResizeRequest            = pEntity.onResizeRequest;
+			onClickSelected = pEntity.onClickSelected;
+			onResizeRequest = pEntity.onResizeRequest;
 			
 			SetExpanded(pEntity.isExpanded);
 			SetEnableMemoArea(pEntity.isEnableMemoArea);
@@ -215,6 +214,8 @@ namespace TaskChecker.GuiControl
 			Size                            fRemoveItemSize    = _children[pIndex].item.Size;
 			
 			if ( _children.Count <= 1 ) { ClearProcessItem(); return; }
+			
+			SetChildSelected(pIndex, false, true);
 
 			//▽ID調整
 			if ( pIndex + 1 < _children.Count )
@@ -244,6 +245,19 @@ namespace TaskChecker.GuiControl
 		}
 
 		/// <summary>
+		/// 選択している作業工程を削除する関数
+		/// </summary>
+		public void RemoveSelectedProcessItems()
+		{
+			if ( _selections.Count <= 0 ) { return; }
+
+			while( _selections.Count > 0 )
+			{
+				RemoveProcessItem(_selections.First().Value._id);
+			}
+		}
+
+		/// <summary>
 		/// 作業工程を初期化(クリア)する関数
 		/// </summary>
 		public void ClearProcessItem()
@@ -251,6 +265,21 @@ namespace TaskChecker.GuiControl
 			SetExpanded(false);
 			_children.Clear();
 			_contentContainer.Panel2.Controls.Clear();
+		}
+
+		/// <summary>
+		/// 子の作業工程の選択状態を初期化(クリア)する関数
+		/// </summary>
+		public void ClearChildSelections()
+		{
+			if ( _selections.Count <= 0 ) { return; }
+			
+			foreach( var value in _selections )
+			{
+				value.Value.SetSelected(false);
+			}
+			
+			_selections.Clear();
 		}
 		
 		/// <summary>
@@ -288,6 +317,52 @@ namespace TaskChecker.GuiControl
 			_contentContainer      .BackColor = _contentContainer      .Panel1.BackColor = _contentContainer      .Panel2.BackColor = _processTitle.BackColor;
 			
 			_isSelected = pIsSelected;
+		}
+
+		/// <summary>
+		/// 子の作業工程の選択状態を設定する関数
+		/// </summary>
+		/// <param name="pIndex"      >設定対象のリストIndex</param>
+		/// <param name="pIsSelected" >選択状態(trueで選択中)</param>
+		/// <param name="pIsIgnoreKey">キー入力を無視するかどうか(trueで無視)</param>
+		public void SetChildSelected( int pIndex , bool pIsSelected , bool pIsIgnoreKey = false )
+		{
+			if ( _children.Count <= 0 || pIndex < 0 || pIndex >= _children.Count ) { return; }
+			
+			_children[pIndex].item.SetSelected(pIsSelected);
+			
+			if ( !pIsSelected ){ if ( _selections.ContainsKey(_children[pIndex].item.guid) ) { _selections.Remove(_children[pIndex].item.guid); } return; }
+			
+			if ( !_selections.ContainsKey(_children[pIndex].item.guid) ) { _selections.Add(_children[pIndex].item.guid, _children[pIndex].item); }
+			
+			if ( pIsIgnoreKey ) { _lastSelectedItem = _children[pIndex].item; return; }
+
+			if ( !_isPressControlKey )
+			{
+				//↓Controlキーが押されていない場合(単体選択動作を行なう)
+				for( int i = 0; i < _children.Count; i++ )
+				{
+					if ( i == _children[pIndex].item.id ) { continue; }
+					_children[i].item.SetSelected(false);
+					if ( _selections.ContainsKey(_children[i].item.guid) ) { _selections.Remove(_children[i].item.guid); }
+				}
+			}
+			
+			if ( _isPressShiftKey )
+			{
+				//↓Shiftキーを押しながらだった場合(前回選択した物から今回選択した物までを選択する)
+				Pair<int,int> fSelectIdxArea = new Pair<int,int>((_lastSelectedItem != null)? _lastSelectedItem.id : 0, _children[pIndex].item.id);
+				//-------------------------------------------------------------
+				if ( fSelectIdxArea.first > fSelectIdxArea.second ) { (fSelectIdxArea.first, fSelectIdxArea.second) = (fSelectIdxArea.second, fSelectIdxArea.first); }
+				//-------------------------------------------------------------
+				for( int i = fSelectIdxArea.first; i <= fSelectIdxArea.second; i++ )
+				{
+					_children[i].item.SetSelected(true);
+					if ( !_selections.ContainsKey(_children[i].item.guid) ) { _selections.Add(_children[i].item.guid, _children[i].item); }
+				}
+			}
+			
+			_lastSelectedItem = _children[pIndex].item;
 		}
 		
 		/// <summary>
