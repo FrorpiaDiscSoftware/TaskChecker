@@ -16,32 +16,8 @@ namespace TaskChecker.GuiControl
                 isEnableMemoArea = false,
                 isExpanded       = false,
                 processState     = TaskState.NOT_WORKING,
-                onClickSelected  = value =>
-                {
-                    if ( _isPressControlKey ) { return; }
-
-                    if ( _isPressShiftKey )
-                    {
-                        //↓Shiftキーを押しながらだった場合(前回選択した物から今回選択した物までを選択する)
-                        if ( value.id - 1 < 0 ) { return; }
-                        //-------------------------------------------------------------
-                        for( int i = value.id - 1; i >= 0; i-- )
-                        {
-                            if ( _children[i].item.isSelected ) { break; }
-                            _children[i].item.isSelected = true;
-                        }
-                    }
-                    else
-                    {
-                        //↓Shiftキーが押されていない場合(単体選択動作)
-                        for( int i = 0; i < _children.Count; i++ )
-                        {
-                            if ( i == value.id ) { continue; }
-                            _children[i].item.isSelected = false;
-                        }
-                    }
-                },
-                onResizeRequest = ( pItem, pSize ) =>
+                onClickSelected  = value => { SetChildSelected(value.id, true); },
+                onResizeRequest  = ( pItem, pSize ) =>
                 {
                     if ( pItem.id - 1 >= 0 ) { _children[pItem.id - 1].containerFixedPanel = FixedPanel.Panel1; }
                     _children[pItem.id].containerFixedPanel = FixedPanel.Panel2;
@@ -58,23 +34,12 @@ namespace TaskChecker.GuiControl
         /// </summary>
         private void _removeToolButton_Click( object pSender, EventArgs pEventArgs )
         {
-            bool fIsRemoveChk = false;//削除確認をしたかどうか
-            
-            foreach( var value in _children )
-            {
-                if ( !value.item.isSelected ) { continue; }
-
-                if ( !fIsRemoveChk )
-                {
-                    DialogResult fResult = MessageBox.Show("選択された作業工程を削除します。\nよろしいですか？", "削除確認", MessageBoxButtons.YesNo);
-                    if ( fResult != DialogResult.Yes ) { break; }
-                    fIsRemoveChk = true;
-                }
-                
-                //TODO:多分、これだと処理位置ずれるから、一旦、削除リスト作らないとダメだけど、
-                //TODO:TaskListItemの削除ボタンの仕様調整する＋こっちも同様の仕様にするので、一旦、この状態で保留。
-                RemoveProcessItem(value.item.id);
-            }
+            if ( _selections.Count <= 0 ) { return; }
+			
+            DialogResult fResult = MessageBox.Show("選択された作業工程を削除します。\nよろしいですか？", "削除確認", MessageBoxButtons.YesNo);
+			
+            if ( fResult != DialogResult.Yes ) { return; }
+            RemoveSelectedProcessItems();
         }
     }
 }

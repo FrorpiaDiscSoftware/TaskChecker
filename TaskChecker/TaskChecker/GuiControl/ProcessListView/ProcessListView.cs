@@ -12,6 +12,8 @@ namespace TaskChecker.GuiControl
         private bool                                  _isPressShiftKey   = false;                                      //Shiftキーが押されているかどうか(trueで押されている)
         private int                                   _id                = 0;                                          //このコントロールのID(Indexに使用)
         private List<ListItemContainer<TaskListItem>> _children          = new List<ListItemContainer<TaskListItem>>();//子の作業工程リスト
+        private Dictionary<string,TaskListItem>       _selections        = new Dictionary<string,TaskListItem>();      //現在選択している作業工程リスト(キー：GUID)
+        private TaskListItem                          _lastSelectedItem  = null;                                       //最後に選択した作業工程項目
         //-----------------------------------------------------------------------------
         public bool isPressControlKey { get => _isPressControlKey; }//Controlキーが押されているかどうか(trueで押されている)
         public bool isPressShiftKey   { get => _isPressShiftKey; }//Shiftキーが押されているかどうか(trueで押されている)
@@ -71,6 +73,8 @@ namespace TaskChecker.GuiControl
         public void Setup( Entity pEntity )
         {
             if ( pEntity == null ) { return; }
+			
+            ClearChildSelections();
             
             _id = pEntity.id;
 
@@ -139,6 +143,8 @@ namespace TaskChecker.GuiControl
             Size                            fRemoveItemSize    = _children[pIndex].item.Size;
 			
             if ( _children.Count <= 1 ) { ClearProcessItem(); return; }
+			
+            SetChildSelected(pIndex, false, true);
 
             //▽ID調整
             if ( pIndex + 1 < _children.Count )
@@ -168,6 +174,19 @@ namespace TaskChecker.GuiControl
         }
 
         /// <summary>
+        /// 選択している作業工程を削除する関数
+        /// </summary>
+        public void RemoveSelectedProcessItems()
+        {
+            if ( _selections.Count <= 0 ) { return; }
+
+            while( _selections.Count > 0 )
+            {
+                RemoveProcessItem(_selections.First().Value.id);
+            }
+        }
+
+        /// <summary>
         /// 作業工程を初期化(クリア)する関数
         /// </summary>
         public void ClearProcessItem()
@@ -175,5 +194,70 @@ namespace TaskChecker.GuiControl
             _children.Clear();
             _rootContainer.Panel2.Controls.Clear();
         }
+
+        /// <summary>
+        /// 子の作業工程の選択状態を初期化(クリア)する関数
+        /// </summary>
+        public void ClearChildSelections()
+        {
+            if ( _selections.Count <= 0 ) { return; }
+			
+            foreach( var value in _selections )
+            {
+                value.Value.isSelected = false;
+            }
+			
+            _selections.Clear();
+        }
+		
+		
+        //～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
+        //↓アクセサ関連
+
+		/// <summary>
+		/// 子の作業工程の選択状態を設定する関数
+		/// </summary>
+		/// <param name="pIndex"      >設定対象のリストIndex</param>
+		/// <param name="pIsSelected" >選択状態(trueで選択中)</param>
+		/// <param name="pIsIgnoreKey">キー入力を無視するかどうか(trueで無視)</param>
+		public void SetChildSelected( int pIndex , bool pIsSelected , bool pIsIgnoreKey = false )
+		{
+			if ( _children.Count <= 0 || pIndex < 0 || pIndex >= _children.Count ) { return; }
+			
+			_children[pIndex].item.isSelected = pIsSelected;
+			
+			if ( !pIsSelected ){ if ( _selections.ContainsKey(_children[pIndex].item.guid) ) { _selections.Remove(_children[pIndex].item.guid); } return; }
+			
+			if ( !_selections.ContainsKey(_children[pIndex].item.guid) ) { _selections.Add(_children[pIndex].item.guid, _children[pIndex].item); }
+			
+			if ( pIsIgnoreKey ) { _lastSelectedItem = _children[pIndex].item; return; }
+
+			if ( !_isPressControlKey )
+			{
+				//↓Controlキーが押されていない場合(単体選択動作を行なう)
+				for( int i = 0; i < _children.Count; i++ )
+				{
+					if ( i == _children[pIndex].item.id ) { continue; }
+					_children[i].item.isSelected = false;
+					if ( _selections.ContainsKey(_children[i].item.guid) ) { _selections.Remove(_children[i].item.guid); }
+				}
+			}
+			
+			if ( _isPressShiftKey )
+			{
+				//↓Shiftキーを押しながらだった場合(前回選択した物から今回選択した物までを選択する)
+				Pair<int,int> fSelectIdxArea = new Pair<int,int>((_lastSelectedItem != null)? _lastSelectedItem.id : 0, _children[pIndex].item.id);
+				//-------------------------------------------------------------
+				if ( fSelectIdxArea.first > fSelectIdxArea.second ) { (fSelectIdxArea.first, fSelectIdxArea.second) = (fSelectIdxArea.second, fSelectIdxArea.first); }
+				//-------------------------------------------------------------
+				for( int i = fSelectIdxArea.first; i <= fSelectIdxArea.second; i++ )
+				{
+					_children[i].item.isSelected = true;
+					if ( !_selections.ContainsKey(_children[i].item.guid) ) { _selections.Add(_children[i].item.guid, _children[i].item); }
+				}
+			}
+			
+			_lastSelectedItem = _children[pIndex].item;
+		}
     }
 }
