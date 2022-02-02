@@ -57,37 +57,12 @@ namespace TaskChecker.GuiControl
 		private void _addProcessButton_Click( object pSender, EventArgs pEventArgs )
 		{
 			AddProcessItem(new Entity {
-				id                         = _children.Count,
-				isEnableMemoArea           = false,
-				isExpanded                 = false,
-				processState               = TaskState.NOT_WORKING,
-				onClickRemoveProcessButton = value => { RemoveProcessItem(value.id); },
-				onClickSelected            = value =>
-				{
-					if ( _isPressControlKey ) { return; }
-
-					if ( _isPressShiftKey )
-					{
-						//↓Shiftキーを押しながらだった場合(前回選択した物から今回選択した物までを選択する)
-						if ( value.id - 1 < 0 ) { return; }
-						//-------------------------------------------------------------
-						for( int i = value.id - 1; i >= 0; i-- )
-						{
-							if ( _children[i].item.isSelected ) { break; }
-							_children[i].item.SetSelected(true);
-						}
-					}
-					else
-					{
-						//↓Shiftキーが押されていない場合(単体選択動作)
-						for( int i = 0; i < _children.Count; i++ )
-						{
-							if ( i == value.id ) { continue; }
-							_children[i].item.SetSelected(false);
-						}
-					}
-				},
-				onResizeRequest = ( pItem, pSize ) =>
+				id               = _children.Count,
+				isEnableMemoArea = false,
+				isExpanded       = false,
+				processState     = TaskState.NOT_WORKING,
+				onClickSelected  = value => { SetChildSelected(value.id,true); },
+				onResizeRequest  = ( pItem, pSize ) =>
 				{
 					if ( pItem._id - 1 >= 0 ) { _children[pItem._id - 1].containerFixedPanel = FixedPanel.Panel1; }
 					_children[pItem._id].containerFixedPanel = FixedPanel.Panel2;
@@ -103,7 +78,12 @@ namespace TaskChecker.GuiControl
 		/// </summary>
 		private void _removeProcessButton_Click( object pSender , EventArgs pEventArgs )
 		{
-			onClickRemoveProcessButton?.Invoke(this);
+			if ( _selections.Count <= 0 ) { return; }
+			
+			DialogResult fResult = MessageBox.Show("選択された作業工程を削除します。\nよろしいですか？", "削除確認", MessageBoxButtons.YesNo);
+			
+			if ( fResult != DialogResult.Yes ) { return; }
+			RemoveSelectedProcessItems();
 		}
 		
 		/// <summary>
