@@ -62,31 +62,7 @@ namespace TaskChecker.GuiControl
 				isExpanded                 = false,
 				processState               = TaskState.NOT_WORKING,
 				onClickRemoveProcessButton = value => { RemoveProcessItem(value.id); },
-				onClickSelected            = value =>
-				{
-					if ( _isPressControlKey ) { return; }
-
-					if ( _isPressShiftKey )
-					{
-						//↓Shiftキーを押しながらだった場合(前回選択した物から今回選択した物までを選択する)
-						if ( value.id - 1 < 0 ) { return; }
-						//-------------------------------------------------------------
-						for( int i = value.id - 1; i >= 0; i-- )
-						{
-							if ( _children[i].item.isSelected ) { break; }
-							_children[i].item.SetSelected(true);
-						}
-					}
-					else
-					{
-						//↓Shiftキーが押されていない場合(単体選択動作)
-						for( int i = 0; i < _children.Count; i++ )
-						{
-							if ( i == value.id ) { continue; }
-							_children[i].item.SetSelected(false);
-						}
-					}
-				},
+				onClickSelected            = value => { SetChildSelected(value.id,true); },
 				onResizeRequest = ( pItem, pSize ) =>
 				{
 					if ( pItem._id - 1 >= 0 ) { _children[pItem._id - 1].containerFixedPanel = FixedPanel.Panel1; }
