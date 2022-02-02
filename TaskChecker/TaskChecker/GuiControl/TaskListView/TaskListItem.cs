@@ -33,7 +33,6 @@ namespace TaskChecker.GuiControl
 		public TaskState                 processState               { get => _processState; set => SetProcessState(value); }//作業工程の進行状態
 		public string                    processTitle               { get => _processTitle.Text; set => SetProcessTitle(value); }//作業工程のタイトルテキスト
 		public string                    memoContent                { get => _memoTextArea.Text; set => _memoTextArea.Text = value; }//メモ書き用テキストエリアの内容
-		public Action<TaskListItem>      onClickRemoveProcessButton { get; set; } = null;//この作業工程の削除ボタン押下イベント
 		public Action<TaskListItem>      onClickSelected            { get; set; } = null;//クリック操作による選択イベント
 		public Action<TaskListItem,Size> onResizeRequest            { get; set; } = null;//リサイズ発生とリクエストイベント※親はこのイベントに応じて自身のサイズを変える必要あり。
 		//-----------------------------------------------------------------------------
@@ -85,11 +84,6 @@ namespace TaskChecker.GuiControl
 			public List<Entity> children = null;
 
 			/// <summary>
-			/// この作業工程の削除ボタン押下イベント
-			/// </summary>
-			public Action<TaskListItem> onClickRemoveProcessButton = null;
-
-			/// <summary>
 			/// クリック操作による選択イベント
 			/// </summary>
 			public Action<TaskListItem> onClickSelected = null;
@@ -125,9 +119,8 @@ namespace TaskChecker.GuiControl
 			
 			SetupProcessStateMenu();
 			
-			onClickRemoveProcessButton = pEntity.onClickRemoveProcessButton;
-			onClickSelected            = pEntity.onClickSelected;
-			onResizeRequest            = pEntity.onResizeRequest;
+			onClickSelected = pEntity.onClickSelected;
+			onResizeRequest = pEntity.onResizeRequest;
 			
 			SetExpanded(pEntity.isExpanded);
 			SetEnableMemoArea(pEntity.isEnableMemoArea);
@@ -249,6 +242,19 @@ namespace TaskChecker.GuiControl
 			}
 			
 			ReSize(new Size(Size.Width,Size.Height - fRemoveItemSize.Height));
+		}
+
+		/// <summary>
+		/// 選択している作業工程を削除する関数
+		/// </summary>
+		public void RemoveSelectedProcessItems()
+		{
+			if ( _selections.Count <= 0 ) { return; }
+
+			while( _selections.Count > 0 )
+			{
+				RemoveProcessItem(_selections.First().Value._id);
+			}
 		}
 
 		/// <summary>

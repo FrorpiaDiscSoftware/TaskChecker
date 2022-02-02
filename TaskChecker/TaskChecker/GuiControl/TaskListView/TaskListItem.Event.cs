@@ -57,13 +57,12 @@ namespace TaskChecker.GuiControl
 		private void _addProcessButton_Click( object pSender, EventArgs pEventArgs )
 		{
 			AddProcessItem(new Entity {
-				id                         = _children.Count,
-				isEnableMemoArea           = false,
-				isExpanded                 = false,
-				processState               = TaskState.NOT_WORKING,
-				onClickRemoveProcessButton = value => { RemoveProcessItem(value.id); },
-				onClickSelected            = value => { SetChildSelected(value.id,true); },
-				onResizeRequest = ( pItem, pSize ) =>
+				id               = _children.Count,
+				isEnableMemoArea = false,
+				isExpanded       = false,
+				processState     = TaskState.NOT_WORKING,
+				onClickSelected  = value => { SetChildSelected(value.id,true); },
+				onResizeRequest  = ( pItem, pSize ) =>
 				{
 					if ( pItem._id - 1 >= 0 ) { _children[pItem._id - 1].containerFixedPanel = FixedPanel.Panel1; }
 					_children[pItem._id].containerFixedPanel = FixedPanel.Panel2;
@@ -79,7 +78,12 @@ namespace TaskChecker.GuiControl
 		/// </summary>
 		private void _removeProcessButton_Click( object pSender , EventArgs pEventArgs )
 		{
-			onClickRemoveProcessButton?.Invoke(this);
+			if ( _selections.Count <= 0 ) { return; }
+			
+			DialogResult fResult = MessageBox.Show("選択された作業工程を削除します。\nよろしいですか？", "削除確認", MessageBoxButtons.YesNo);
+			
+			if ( fResult != DialogResult.Yes ) { return; }
+			RemoveSelectedProcessItems();
 		}
 		
 		/// <summary>
