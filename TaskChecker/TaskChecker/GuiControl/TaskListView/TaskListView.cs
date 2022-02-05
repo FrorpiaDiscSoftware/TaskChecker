@@ -32,6 +32,11 @@ namespace TaskChecker.GuiControl
 			/// タスクのタイトルテキスト
 			/// </summary>
 			public string taskTitle = "";
+
+			/// <summary>
+			/// 工程リストの設定
+			/// </summary>
+			public ProcessListView.Entity processListView = null;
 		}
 
 
@@ -74,6 +79,8 @@ namespace TaskChecker.GuiControl
 			SetTaskTitle(pEntity.taskTitle);
 			
 			SetTaskTitleEditMode(false);
+			
+			_processListView.Setup(pEntity.processListView);
 		}
 
 		/// <summary>
