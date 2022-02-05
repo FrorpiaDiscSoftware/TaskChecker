@@ -30,15 +30,19 @@ namespace TaskChecker.GuiControl
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components             = new System.ComponentModel.Container();
 			this._rootContainer         = new System.Windows.Forms.SplitContainer();
 			this.splitContainer1        = new System.Windows.Forms.SplitContainer();
 			this._headerStatusContainer = new System.Windows.Forms.SplitContainer();
 			this._statusButton          = new System.Windows.Forms.Button();
+			this._taskStateMenu         = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this._taskTitleContainer    = new System.Windows.Forms.SplitContainer();
 			this._taskTitle             = new System.Windows.Forms.Label();
 			this._taskTitleInputBox     = new System.Windows.Forms.TextBox();
+			this._processListView       = new TaskChecker.GuiControl.ProcessListView();
 			((System.ComponentModel.ISupportInitialize)(this._rootContainer)).BeginInit();
 			this._rootContainer.Panel1.SuspendLayout();
+			this._rootContainer.Panel2.SuspendLayout();
 			this._rootContainer.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
@@ -63,6 +67,10 @@ namespace TaskChecker.GuiControl
 			// _rootContainer.Panel1
 			// 
 			this._rootContainer.Panel1.Controls.Add(this.splitContainer1);
+			// 
+			// _rootContainer.Panel2
+			// 
+			this._rootContainer.Panel2.Controls.Add(this._processListView);
 			this._rootContainer.Size             = new System.Drawing.Size(500, 450);
 			this._rootContainer.SplitterDistance = 233;
 			this._rootContainer.TabIndex         = 0;
@@ -105,15 +113,22 @@ namespace TaskChecker.GuiControl
 			// 
 			// _statusButton
 			// 
-			this._statusButton.BackgroundImage         = global::TaskChecker.Properties.Resources.taskNotWorking;
-			this._statusButton.BackgroundImageLayout   = System.Windows.Forms.ImageLayout.Stretch;
-			this._statusButton.Dock                    = System.Windows.Forms.DockStyle.Fill;
-			this._statusButton.FlatStyle               = System.Windows.Forms.FlatStyle.Popup;
-			this._statusButton.Location                = new System.Drawing.Point(0, 0);
-			this._statusButton.Name                    = "_statusButton";
-			this._statusButton.Size                    = new System.Drawing.Size(25, 25);
-			this._statusButton.TabIndex                = 0;
-			this._statusButton.UseVisualStyleBackColor = true;
+			this._statusButton.BackgroundImage         =  global::TaskChecker.Properties.Resources.taskNotWorking;
+			this._statusButton.BackgroundImageLayout   =  System.Windows.Forms.ImageLayout.Stretch;
+			this._statusButton.ContextMenuStrip        =  this._taskStateMenu;
+			this._statusButton.Dock                    =  System.Windows.Forms.DockStyle.Fill;
+			this._statusButton.FlatStyle               =  System.Windows.Forms.FlatStyle.Popup;
+			this._statusButton.Location                =  new System.Drawing.Point(0, 0);
+			this._statusButton.Name                    =  "_statusButton";
+			this._statusButton.Size                    =  new System.Drawing.Size(25, 25);
+			this._statusButton.TabIndex                =  0;
+			this._statusButton.UseVisualStyleBackColor =  true;
+			this._statusButton.Click                   += new System.EventHandler(this._statusButton_Click);
+			// 
+			// _taskStateMenu
+			// 
+			this._taskStateMenu.Name = "contextMenuStrip1";
+			this._taskStateMenu.Size = new System.Drawing.Size(153, 26);
 			// 
 			// _taskTitleContainer
 			// 
@@ -155,6 +170,14 @@ namespace TaskChecker.GuiControl
 			this._taskTitleInputBox.TabIndex = 1;
 			this._taskTitleInputBox.Text     = "TitleText";
 			// 
+			// _processListView
+			// 
+			this._processListView.Dock     = System.Windows.Forms.DockStyle.Fill;
+			this._processListView.Location = new System.Drawing.Point(0, 0);
+			this._processListView.Name     = "_processListView";
+			this._processListView.Size     = new System.Drawing.Size(500, 213);
+			this._processListView.TabIndex = 0;
+			// 
 			// TaskListView
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -163,6 +186,7 @@ namespace TaskChecker.GuiControl
 			this.Name = "TaskListView";
 			this.Size = new System.Drawing.Size(500, 450);
 			this._rootContainer.Panel1.ResumeLayout(false);
+			this._rootContainer.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this._rootContainer)).EndInit();
 			this._rootContainer.ResumeLayout(false);
 			this.splitContainer1.Panel1.ResumeLayout(false);
@@ -179,6 +203,10 @@ namespace TaskChecker.GuiControl
 			this._taskTitleContainer.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
+
+		private System.Windows.Forms.ContextMenuStrip _taskStateMenu;
+
+		private TaskChecker.GuiControl.ProcessListView _processListView;
 
 		private System.Windows.Forms.TextBox _taskTitleInputBox;
 

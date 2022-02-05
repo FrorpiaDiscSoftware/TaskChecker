@@ -45,6 +45,9 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="TaskChecker, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>bin\Debug\TaskChecker.exe</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GuiControl\ProcessListView\ProcessListView.cs">
@@ -67,6 +70,7 @@
     <Compile Include="GuiControl\TaskListView\TaskListView.Designer.cs">
       <DependentUpon>TaskListView.cs</DependentUpon>
     </Compile>
+    <Compile Include="GuiControl\TaskListView\TaskListView.Event.cs" />
     <Compile Include="GuiControl\_Utilities\ListItemContainer.cs">
       <SubType>UserControl</SubType>
     </Compile>
