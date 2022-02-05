@@ -128,7 +128,7 @@ namespace TaskChecker.GuiControl
 			// _taskStateMenu
 			// 
 			this._taskStateMenu.Name = "contextMenuStrip1";
-			this._taskStateMenu.Size = new System.Drawing.Size(153, 26);
+			this._taskStateMenu.Size = new System.Drawing.Size(61, 4);
 			// 
 			// _taskTitleContainer
 			// 
@@ -152,23 +152,25 @@ namespace TaskChecker.GuiControl
 			// 
 			// _taskTitle
 			// 
-			this._taskTitle.Dock      = System.Windows.Forms.DockStyle.Fill;
-			this._taskTitle.Font      = new System.Drawing.Font("ＭＳ ゴシック", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this._taskTitle.Location  = new System.Drawing.Point(0, 0);
-			this._taskTitle.Name      = "_taskTitle";
-			this._taskTitle.Size      = new System.Drawing.Size(235, 25);
-			this._taskTitle.TabIndex  = 4;
-			this._taskTitle.Text      = "TitleText";
-			this._taskTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this._taskTitle.Dock        =  System.Windows.Forms.DockStyle.Fill;
+			this._taskTitle.Font        =  new System.Drawing.Font("ＭＳ ゴシック", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+			this._taskTitle.Location    =  new System.Drawing.Point(0, 0);
+			this._taskTitle.Name        =  "_taskTitle";
+			this._taskTitle.Size        =  new System.Drawing.Size(235, 25);
+			this._taskTitle.TabIndex    =  4;
+			this._taskTitle.Text        =  "TitleText";
+			this._taskTitle.TextAlign   =  System.Drawing.ContentAlignment.MiddleLeft;
+			this._taskTitle.DoubleClick += new System.EventHandler(this._taskTitle_DoubleClick);
 			// 
 			// _taskTitleInputBox
 			// 
-			this._taskTitleInputBox.Dock     = System.Windows.Forms.DockStyle.Fill;
-			this._taskTitleInputBox.Location = new System.Drawing.Point(0, 3);
-			this._taskTitleInputBox.Name     = "_taskTitleInputBox";
-			this._taskTitleInputBox.Size     = new System.Drawing.Size(232, 19);
-			this._taskTitleInputBox.TabIndex = 1;
-			this._taskTitleInputBox.Text     = "TitleText";
+			this._taskTitleInputBox.Dock           =  System.Windows.Forms.DockStyle.Fill;
+			this._taskTitleInputBox.Location       =  new System.Drawing.Point(0, 3);
+			this._taskTitleInputBox.Name           =  "_taskTitleInputBox";
+			this._taskTitleInputBox.Size           =  new System.Drawing.Size(232, 19);
+			this._taskTitleInputBox.TabIndex       =  1;
+			this._taskTitleInputBox.Text           =  "TitleText";
+			this._taskTitleInputBox.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this._taskTitleInputBox_PreviewKeyDown);
 			// 
 			// _processListView
 			// 

@@ -9,7 +9,10 @@ namespace TaskChecker.GuiControl
 		private TaskState                               _taskState          = TaskState.NOT_WORKING;                        //タスクの進行状態
 		private Dictionary<TaskState,ToolStripMenuItem> _taskStateMenuItems = new Dictionary<TaskState,ToolStripMenuItem>();//タスクの進行状態設定メニュー項目リスト
 		//-----------------------------------------------------------------------------
-		public TaskState taskState { get => _taskState; set => SetTaskState(value); }//タスクの進行状態
+		public bool      isProcessTitleEditMode { get => !_taskTitleContainer.Panel2Collapsed; }//タスクタイトルテキストの編集モード状態
+		public TaskState taskState              { get => _taskState; set => SetTaskState(value); }//タスクの進行状態
+		public string    taskTitle              { get => _taskTitle.Text; set => SetTaskTitle(value); }//タスクのタイトルテキスト
+		//-----------------------------------------------------------------------------
 
 
 		//～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
@@ -24,6 +27,11 @@ namespace TaskChecker.GuiControl
 			/// タスクの進行状態
 			/// </summary>
 			public TaskState taskState = TaskState.NOT_WORKING;
+			
+			/// <summary>
+			/// タスクのタイトルテキスト
+			/// </summary>
+			public string taskTitle = "";
 		}
 
 
@@ -63,6 +71,9 @@ namespace TaskChecker.GuiControl
 			SetupTaskStateMenu();
 			
 			SetTaskState(pEntity.taskState);
+			SetTaskTitle(pEntity.taskTitle);
+			
+			SetTaskTitleEditMode(false);
 		}
 
 		/// <summary>
@@ -101,6 +112,27 @@ namespace TaskChecker.GuiControl
 			_taskStateMenuItems[pState    ].Checked = true;
 			
 			_taskState = pState;
+		}
+
+		/// <summary>
+		/// タスクタイトルテキストを設定する関数
+		/// </summary>
+		/// <param name="pTitleText">設定する新しいタイトルテキスト</param>
+		private void SetTaskTitle( string pTitleText )
+		{
+			if ( pTitleText == null ) { return; }
+
+			_taskTitleInputBox.Text = _taskTitle.Text = pTitleText;
+		}
+
+		/// <summary>
+		/// タスクタイトルテキストの編集モード状態を設定する関数
+		/// </summary>
+		/// <param name="pIsEditMode">編集モードかどうか(trueで編集モード)</param>
+		private void SetTaskTitleEditMode( bool pIsEditMode )
+		{
+			_taskTitleContainer.Panel1Collapsed = pIsEditMode;
+			_taskTitleContainer.Panel2Collapsed = !pIsEditMode;
 		}
 	}
 }
