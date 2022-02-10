@@ -32,7 +32,7 @@ namespace TaskChecker.GuiControl
 		{
 			this.components             = new System.ComponentModel.Container();
 			this._rootContainer         = new System.Windows.Forms.SplitContainer();
-			this.splitContainer1        = new System.Windows.Forms.SplitContainer();
+			this._headerContainer       = new System.Windows.Forms.SplitContainer();
 			this._headerStatusContainer = new System.Windows.Forms.SplitContainer();
 			this._statusButton          = new System.Windows.Forms.Button();
 			this._taskStateMenu         = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -44,9 +44,9 @@ namespace TaskChecker.GuiControl
 			this._rootContainer.Panel1.SuspendLayout();
 			this._rootContainer.Panel2.SuspendLayout();
 			this._rootContainer.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-			this.splitContainer1.Panel1.SuspendLayout();
-			this.splitContainer1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this._headerContainer)).BeginInit();
+			this._headerContainer.Panel1.SuspendLayout();
+			this._headerContainer.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this._headerStatusContainer)).BeginInit();
 			this._headerStatusContainer.Panel1.SuspendLayout();
 			this._headerStatusContainer.Panel2.SuspendLayout();
@@ -66,7 +66,7 @@ namespace TaskChecker.GuiControl
 			// 
 			// _rootContainer.Panel1
 			// 
-			this._rootContainer.Panel1.Controls.Add(this.splitContainer1);
+			this._rootContainer.Panel1.Controls.Add(this._headerContainer);
 			// 
 			// _rootContainer.Panel2
 			// 
@@ -75,22 +75,22 @@ namespace TaskChecker.GuiControl
 			this._rootContainer.SplitterDistance = 233;
 			this._rootContainer.TabIndex         = 0;
 			// 
-			// splitContainer1
+			// _headerContainer
 			// 
-			this.splitContainer1.Dock            = System.Windows.Forms.DockStyle.Fill;
-			this.splitContainer1.FixedPanel      = System.Windows.Forms.FixedPanel.Panel1;
-			this.splitContainer1.IsSplitterFixed = true;
-			this.splitContainer1.Location        = new System.Drawing.Point(0, 0);
-			this.splitContainer1.Margin          = new System.Windows.Forms.Padding(0);
-			this.splitContainer1.Name            = "splitContainer1";
-			this.splitContainer1.Orientation     = System.Windows.Forms.Orientation.Horizontal;
+			this._headerContainer.Dock            = System.Windows.Forms.DockStyle.Fill;
+			this._headerContainer.FixedPanel      = System.Windows.Forms.FixedPanel.Panel1;
+			this._headerContainer.IsSplitterFixed = true;
+			this._headerContainer.Location        = new System.Drawing.Point(0, 0);
+			this._headerContainer.Margin          = new System.Windows.Forms.Padding(0);
+			this._headerContainer.Name            = "_headerContainer";
+			this._headerContainer.Orientation     = System.Windows.Forms.Orientation.Horizontal;
 			// 
-			// splitContainer1.Panel1
+			// _headerContainer.Panel1
 			// 
-			this.splitContainer1.Panel1.Controls.Add(this._headerStatusContainer);
-			this.splitContainer1.Size             = new System.Drawing.Size(500, 233);
-			this.splitContainer1.SplitterDistance = 25;
-			this.splitContainer1.TabIndex         = 0;
+			this._headerContainer.Panel1.Controls.Add(this._headerStatusContainer);
+			this._headerContainer.Size             = new System.Drawing.Size(500, 233);
+			this._headerContainer.SplitterDistance = 25;
+			this._headerContainer.TabIndex         = 0;
 			// 
 			// _headerStatusContainer
 			// 
@@ -191,9 +191,9 @@ namespace TaskChecker.GuiControl
 			this._rootContainer.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this._rootContainer)).EndInit();
 			this._rootContainer.ResumeLayout(false);
-			this.splitContainer1.Panel1.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-			this.splitContainer1.ResumeLayout(false);
+			this._headerContainer.Panel1.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this._headerContainer)).EndInit();
+			this._headerContainer.ResumeLayout(false);
 			this._headerStatusContainer.Panel1.ResumeLayout(false);
 			this._headerStatusContainer.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this._headerStatusContainer)).EndInit();
@@ -220,7 +220,7 @@ namespace TaskChecker.GuiControl
 
 		private System.Windows.Forms.SplitContainer _headerStatusContainer;
 
-		private System.Windows.Forms.SplitContainer splitContainer1;
+		private System.Windows.Forms.SplitContainer _headerContainer;
 
 		private System.Windows.Forms.SplitContainer _rootContainer;
 
