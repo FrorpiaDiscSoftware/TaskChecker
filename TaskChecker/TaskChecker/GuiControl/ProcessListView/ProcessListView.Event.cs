@@ -20,7 +20,17 @@ namespace TaskChecker.GuiControl
                 onClickSelected  = value => { SetChildSelected(value.id, true); },
                 onResizeRequest  = ( pItem, pSize ) =>
                 {
-                    Debug.Print($"[Item-{pItem.id}] onResizeRequest!!");
+                    if ( pItem.id >= _children.Count ) { return; }
+                    
+                    Size fNewLayoutPanelSize = _listItemLayoutPanel.Size;//新たに設定するLayoutPanelのサイズ
+
+                    fNewLayoutPanelSize.Height -= pItem.Size.Height;
+                    fNewLayoutPanelSize.Height += pSize.Height;
+                    
+                    _listItemLayoutPanel.RowStyles[pItem.id].Height = pSize.Height;
+                    _listItemLayoutPanel.Size = fNewLayoutPanelSize;
+                    
+                    pItem.Size = pSize;
                 },
             });
         }

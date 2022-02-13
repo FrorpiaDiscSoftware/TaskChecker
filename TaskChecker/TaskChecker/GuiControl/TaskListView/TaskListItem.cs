@@ -128,6 +128,9 @@ namespace TaskChecker.GuiControl
 			ClearChildSelections();
 			
 			SetupProcessStateMenu();
+
+			_id                = pEntity.id;
+			_memoTextArea.Text = pEntity.memoContent;
 			
 			onClickSelected = pEntity.onClickSelected;
 			onResizeRequest = pEntity.onResizeRequest;
@@ -136,9 +139,6 @@ namespace TaskChecker.GuiControl
 			SetEnableMemoArea(pEntity.isEnableMemoArea);
 			SetProcessState(pEntity.processState);
 			SetProcessTitle(pEntity.processTitle);
-
-			_id                        = pEntity.id;
-			_memoTextArea.Text         = pEntity.memoContent;
 
 			if ( pEntity.children != null )
 			{
@@ -302,7 +302,7 @@ namespace TaskChecker.GuiControl
 		{
 			if ( pSize == Size ) { return; }
 			if ( pSize.Height < TITLE_HEIGHT ) { pSize.Height = TITLE_HEIGHT; }
-			if ( Dock != DockStyle.Fill ) { Size = pSize; } else { onResizeRequest.Invoke(this,pSize); }
+			if ( Dock != DockStyle.Fill && onResizeRequest == null ) { Size = pSize; } else { onResizeRequest.Invoke(this,pSize); }
 			Update();
 		}
 		
