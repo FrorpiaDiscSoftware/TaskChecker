@@ -250,5 +250,15 @@ namespace TaskChecker.GuiControl
 			
 			_lastSelectedItem = _children[pIndex];
 		}
+
+		/// <summary>
+		/// 指定したIndexの作業工程を返す関数
+		/// </summary>
+		/// <param name="pIndex"></param>
+		/// <returns></returns>
+		public TaskListItem GetProcessItem( int pIndex )
+		{
+			return (pIndex < _children.Count)? _children[pIndex] : null;
+		}
     }
 }

@@ -11,7 +11,7 @@ namespace TaskChecker.GuiControl
 		/// </summary>
 		private void _expandButton_Click( object pSender , EventArgs pEventArgs )
 		{
-			if ( _children.Count <= 0 ) { return; }
+			if ( _processListLayoutPanel.childrenCount <= 0 ) { return; }
 			SetExpanded(!isExpanded);
 		}
 		
@@ -57,18 +57,26 @@ namespace TaskChecker.GuiControl
 		private void _addProcessButton_Click( object pSender, EventArgs pEventArgs )
 		{
 			AddProcessItem(new Entity {
-				id               = _children.Count,
+				id               = _processListLayoutPanel.childrenCount,
 				isEnableMemoArea = false,
 				isExpanded       = false,
 				processState     = TaskState.NOT_WORKING,
-				onClickSelected  = value => { SetChildSelected(value.id,true); },
+				onClickSelected  = value => { SetChildSelected(value.id, true); },
 				onResizeRequest  = ( pItem, pSize ) =>
 				{
-					if ( pItem._id - 1 >= 0 ) { _children[pItem._id - 1].containerFixedPanel = FixedPanel.Panel1; }
-					_children[pItem._id].containerFixedPanel = FixedPanel.Panel2;
-					ReSize(new Size(Size.Width, Size.Height + (pSize.Height - pItem.Size.Height)));
-					_children[pItem._id].containerFixedPanel = FixedPanel.None;
-					if ( pItem._id - 1 >= 0 ) { _children[pItem._id - 1].containerFixedPanel = FixedPanel.None; }
+					if ( pItem.id >= _processListLayoutPanel.childrenCount ) { pItem.Size = pSize; return; }
+                    
+					Size fNewLayoutPanelSize = _processListLayoutPanel.layoutPanelSize;//新たに設定するLayoutPanelのサイズ
+
+					fNewLayoutPanelSize.Height -= pItem.Size.Height;
+					fNewLayoutPanelSize.Height += pSize.Height;
+                    
+					_processListLayoutPanel.layoutPanelLineStyles[pItem.id].Height = pSize.Height;
+					_processListLayoutPanel.layoutPanelSize                        = fNewLayoutPanelSize;
+                    
+					pItem.Size = pSize;
+					
+					ReSize(new Size( Size.Width , Size.Height + (_processListLayoutPanel.layoutPanelSize.Height - _processListLayoutPanel.Size.Height) ));
 				},
 			});
 		}
@@ -78,7 +86,7 @@ namespace TaskChecker.GuiControl
 		/// </summary>
 		private void _removeProcessButton_Click( object pSender , EventArgs pEventArgs )
 		{
-			if ( _selections.Count <= 0 ) { return; }
+			if ( _processListLayoutPanel.selectionCount <= 0 ) { return; }
 			
 			DialogResult fResult = MessageBox.Show("選択された作業工程を削除します。\nよろしいですか？", "削除確認", MessageBoxButtons.YesNo);
 			
