@@ -31,11 +31,11 @@ namespace TaskChecker.GuiControl
         /// </summary>
         private void InitializeComponent()
         {
-            this._rootContainer       = new System.Windows.Forms.SplitContainer();
-            this._toolBar             = new System.Windows.Forms.ToolStrip();
-            this._addToolButton       = new System.Windows.Forms.ToolStripButton();
-            this._removeToolButton    = new System.Windows.Forms.ToolStripButton();
-            this._listItemLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this._rootContainer          = new System.Windows.Forms.SplitContainer();
+            this._toolBar                = new System.Windows.Forms.ToolStrip();
+            this._addToolButton          = new System.Windows.Forms.ToolStripButton();
+            this._removeToolButton       = new System.Windows.Forms.ToolStripButton();
+            this._processListLayoutPanel = new TaskChecker.GuiControl.ProcessListLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this._rootContainer)).BeginInit();
             this._rootContainer.Panel1.SuspendLayout();
             this._rootContainer.Panel2.SuspendLayout();
@@ -60,7 +60,7 @@ namespace TaskChecker.GuiControl
             // _rootContainer.Panel2
             // 
             this._rootContainer.Panel2.AutoScroll = true;
-            this._rootContainer.Panel2.Controls.Add(this._listItemLayoutPanel);
+            this._rootContainer.Panel2.Controls.Add(this._processListLayoutPanel);
             this._rootContainer.Size             = new System.Drawing.Size(500, 300);
             this._rootContainer.SplitterDistance = 25;
             this._rootContainer.TabIndex         = 1;
@@ -94,18 +94,14 @@ namespace TaskChecker.GuiControl
             this._removeToolButton.Text                  =  "toolStripButton2";
             this._removeToolButton.Click                 += new System.EventHandler(this._removeToolButton_Click);
             // 
-            // _listItemLayoutPanel
+            // _processListLayoutPanel
             // 
-            this._listItemLayoutPanel.ColumnCount = 1;
-            this._listItemLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this._listItemLayoutPanel.Dock     = System.Windows.Forms.DockStyle.Top;
-            this._listItemLayoutPanel.Location = new System.Drawing.Point(0, 0);
-            this._listItemLayoutPanel.Margin   = new System.Windows.Forms.Padding(0);
-            this._listItemLayoutPanel.Name     = "_listItemLayoutPanel";
-            this._listItemLayoutPanel.RowCount = 1;
-            this._listItemLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this._listItemLayoutPanel.Size     = new System.Drawing.Size(500, 50);
-            this._listItemLayoutPanel.TabIndex = 0;
+            this._processListLayoutPanel.Dock     = System.Windows.Forms.DockStyle.Fill;
+            this._processListLayoutPanel.Location = new System.Drawing.Point(0, 0);
+            this._processListLayoutPanel.Margin   = new System.Windows.Forms.Padding(0);
+            this._processListLayoutPanel.Name     = "_processListLayoutPanel";
+            this._processListLayoutPanel.Size     = new System.Drawing.Size(500, 271);
+            this._processListLayoutPanel.TabIndex = 1;
             // 
             // ProcessListView
             // 
@@ -124,7 +120,7 @@ namespace TaskChecker.GuiControl
             this.ResumeLayout(false);
         }
 
-        private System.Windows.Forms.TableLayoutPanel _listItemLayoutPanel;
+        private TaskChecker.GuiControl.ProcessListLayoutPanel _processListLayoutPanel;
 
         private System.Windows.Forms.SplitContainer _rootContainer;
 

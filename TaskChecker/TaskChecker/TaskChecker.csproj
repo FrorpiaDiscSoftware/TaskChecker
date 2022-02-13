@@ -50,6 +50,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GuiControl\ProcessListView\ProcessListLayoutPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GuiControl\ProcessListView\ProcessListLayoutPanel.Designer.cs">
+      <DependentUpon>ProcessListLayoutPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="GuiControl\ProcessListView\ProcessListView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -90,6 +96,9 @@
     <Compile Include="Utilities\ApplicationUtility.cs" />
     <Compile Include="Utilities\Constants.cs" />
     <Compile Include="Utilities\Pair.cs" />
+    <EmbeddedResource Include="GuiControl\ProcessListView\ProcessListLayoutPanel.resx">
+      <DependentUpon>ProcessListLayoutPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GuiControl\ProcessListView\ProcessListView.resx">
       <DependentUpon>ProcessListView.cs</DependentUpon>
     </EmbeddedResource>
