@@ -20,7 +20,7 @@ namespace TaskChecker.GuiControl
                 onClickSelected  = value => { SetChildSelected(value.id, true); },
                 onResizeRequest  = ( pItem, pSize ) =>
                 {
-                    if ( pItem.id >= _children.Count ) { return; }
+                    if ( pItem.id >= _children.Count ) { pItem.Size = pSize; return; }
                     
                     Size fNewLayoutPanelSize = _listItemLayoutPanel.Size;//新たに設定するLayoutPanelのサイズ
 
