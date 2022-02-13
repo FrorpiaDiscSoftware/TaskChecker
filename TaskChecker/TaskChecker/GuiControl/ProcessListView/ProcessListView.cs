@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -8,12 +9,12 @@ namespace TaskChecker.GuiControl
 {
     public partial class ProcessListView : UserControl
     {
-        private bool                                  _isPressControlKey = false;                                      //Controlキーが押されているかどうか(trueで押されている)
-        private bool                                  _isPressShiftKey   = false;                                      //Shiftキーが押されているかどうか(trueで押されている)
-        private int                                   _id                = 0;                                          //このコントロールのID(Indexに使用)
-        private List<ListItemContainer<TaskListItem>> _children          = new List<ListItemContainer<TaskListItem>>();//子の作業工程リスト
-        private Dictionary<string,TaskListItem>       _selections        = new Dictionary<string,TaskListItem>();      //現在選択している作業工程リスト(キー：GUID)
-        private TaskListItem                          _lastSelectedItem  = null;                                       //最後に選択した作業工程項目
+        private bool                            _isPressControlKey = false;                                //Controlキーが押されているかどうか(trueで押されている)
+        private bool                            _isPressShiftKey   = false;                                //Shiftキーが押されているかどうか(trueで押されている)
+        private int                             _id                = 0;                                    //このコントロールのID(Indexに使用)
+        private List<TaskListItem>              _children          = new List<TaskListItem>();             //子の作業工程リスト
+        private Dictionary<string,TaskListItem> _selections        = new Dictionary<string,TaskListItem>();//現在選択している作業工程リスト(キー：GUID)
+        private TaskListItem                    _lastSelectedItem  = null;                                 //最後に選択した作業工程項目
         //-----------------------------------------------------------------------------
         public bool isPressControlKey { get => _isPressControlKey; }//Controlキーが押されているかどうか(trueで押されている)
         public bool isPressShiftKey   { get => _isPressShiftKey; }//Shiftキーが押されているかどうか(trueで押されている)
@@ -103,32 +104,24 @@ namespace TaskChecker.GuiControl
         /// <param name="pEntity">作業工程の初期設定</param>
         public void AddProcessItem( TaskListItem.Entity pEntity = null )
         {
-            ListItemContainer<TaskListItem>.Entity fItemEntity = new ListItemContainer<TaskListItem>.Entity();
-			
-            fItemEntity.item = new TaskListItem();
+	        if ( pEntity == null ) { pEntity = new TaskListItem.Entity(); }
 
-            Update();
-			
-            if ( _rootContainer.Panel2.Controls.Count <= 0 )
-            {
-                _children.Clear();
-                _children.Add(new ListItemContainer<TaskListItem>());
-                _rootContainer.Panel2.Controls.Add(_children.Last());
-                _children.Last().Dock = DockStyle.Top;
-                _children.Last().Update();
-                _children.Last().Setup(fItemEntity);
-                _rootContainer.Panel2.Controls[0].Size = new Size(Size.Width, fItemEntity.item.Size.Height);
-                _rootContainer.Panel2.Controls[0].Update();
-            }
-            else
-            {
-                _children.Last().SetNext(fItemEntity);
-                _children.Add(_children.Last().next);
-                _rootContainer.Panel2.Controls[0].Size = new Size(Size.Width, _rootContainer.Panel2.Controls[0].Size.Height + fItemEntity.item.Size.Height);
-                _rootContainer.Panel2.Controls[0].Update();
-            }
-			
-            fItemEntity.item.Setup((pEntity != null)? pEntity : new TaskListItem.Entity { id = _children.Count - 1 });
+	        Size fNewLayoutPanelSize = _listItemLayoutPanel.Size;//新たに設定するLayoutPanelのサイズ
+	        
+	        if ( _children.Count <= 0 ) { _listItemLayoutPanel.RowStyles.Clear(); }
+
+	        pEntity.id = _children.Count;
+	        
+	        _children.Add(new TaskListItem(pEntity));
+
+	        fNewLayoutPanelSize.Height = _children.Last().Size.Height;
+	        if ( _listItemLayoutPanel.RowStyles.Count > 0 ) { fNewLayoutPanelSize.Height += _listItemLayoutPanel.Size.Height; }
+
+	        _listItemLayoutPanel.Size = fNewLayoutPanelSize;
+	        _listItemLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, _children.Last().Size.Height));
+	        _listItemLayoutPanel.Controls.Add(_children.Last(), 0, _children.Count - 1);
+	        
+	        _children.Last().Dock = DockStyle.Top;
         }
 
         /// <summary>
@@ -139,38 +132,29 @@ namespace TaskChecker.GuiControl
         {
             if ( _children.Count <= 0 || pIndex < 0 || pIndex >= _children.Count ) { return; }
 
-            ListItemContainer<TaskListItem> fJoinItemContainer = (pIndex + 1 < _children.Count)? _children[pIndex + 1] : null;
-            Size                            fRemoveItemSize    = _children[pIndex].item.Size;
-			
             if ( _children.Count <= 1 ) { ClearProcessItem(); return; }
 			
             SetChildSelected(pIndex, false, true);
+            
+            //▽削除処理１
+            _listItemLayoutPanel.Controls.Remove(_children[pIndex]);
 
-            //▽ID調整
+            //▽ID調整+テーブルレイアウトの登録位置調整
             if ( pIndex + 1 < _children.Count )
             {
                 for( int i = pIndex + 1; i < _children.Count; i++ )
                 {
-                    _children[i].item.id--;
+                    _children[i].id--;
+                    _listItemLayoutPanel.Controls.Remove(_children[i]);
+                    _listItemLayoutPanel.RowStyles[_children[i].id].Height = _children[i].Size.Height;
+                    _listItemLayoutPanel.Controls.Add(_children[i], 0, _children[i].id);
                 }
             }
 
-            //▽削除処理
-            if ( pIndex == 0 )
-            {
-                fJoinItemContainer.Dock = DockStyle.Top;
-                fJoinItemContainer.Update();
-                _rootContainer.Panel2.Controls.Clear();
-                _rootContainer.Panel2.Controls.Add(fJoinItemContainer);
-                _children.RemoveAt(pIndex);
-            }
-            else
-            {
-                _children[pIndex - 1].SetNext(fJoinItemContainer);
-                _children.RemoveAt(pIndex);
-                _rootContainer.Panel2.Controls[0].Size = new Size(Size.Width, _rootContainer.Panel2.Controls[0].Size.Height - fRemoveItemSize.Height);
-                _rootContainer.Panel2.Controls[0].Update();
-            }
+            //▽削除処理２
+            _listItemLayoutPanel.RowStyles.RemoveAt(_listItemLayoutPanel.RowStyles.Count - 1);
+            _listItemLayoutPanel.Size = new Size(_listItemLayoutPanel.Size.Width, _listItemLayoutPanel.Size.Height - _children[pIndex].Size.Height);
+            _children.RemoveAt(pIndex);
         }
 
         /// <summary>
@@ -191,8 +175,13 @@ namespace TaskChecker.GuiControl
         /// </summary>
         public void ClearProcessItem()
         {
+	        ClearChildSelections();
+	        
+	        _listItemLayoutPanel.Size = new Size(_listItemLayoutPanel.Size.Width, 0);
+	        
+            _listItemLayoutPanel.Controls.Clear();
+            _listItemLayoutPanel.RowStyles.Clear();
             _children.Clear();
-            _rootContainer.Panel2.Controls.Clear();
         }
 
         /// <summary>
@@ -224,40 +213,40 @@ namespace TaskChecker.GuiControl
 		{
 			if ( _children.Count <= 0 || pIndex < 0 || pIndex >= _children.Count ) { return; }
 			
-			_children[pIndex].item.isSelected = pIsSelected;
+			_children[pIndex].isSelected = pIsSelected;
 			
-			if ( !pIsSelected ){ if ( _selections.ContainsKey(_children[pIndex].item.guid) ) { _selections.Remove(_children[pIndex].item.guid); } return; }
+			if ( !pIsSelected ){ if ( _selections.ContainsKey(_children[pIndex].guid) ) { _selections.Remove(_children[pIndex].guid); } return; }
 			
-			if ( !_selections.ContainsKey(_children[pIndex].item.guid) ) { _selections.Add(_children[pIndex].item.guid, _children[pIndex].item); }
+			if ( !_selections.ContainsKey(_children[pIndex].guid) ) { _selections.Add(_children[pIndex].guid, _children[pIndex]); }
 			
-			if ( pIsIgnoreKey ) { _lastSelectedItem = _children[pIndex].item; return; }
+			if ( pIsIgnoreKey ) { _lastSelectedItem = _children[pIndex]; return; }
 
 			if ( !_isPressControlKey )
 			{
 				//↓Controlキーが押されていない場合(単体選択動作を行なう)
 				for( int i = 0; i < _children.Count; i++ )
 				{
-					if ( i == _children[pIndex].item.id ) { continue; }
-					_children[i].item.isSelected = false;
-					if ( _selections.ContainsKey(_children[i].item.guid) ) { _selections.Remove(_children[i].item.guid); }
+					if ( i == _children[pIndex].id ) { continue; }
+					_children[i].isSelected = false;
+					if ( _selections.ContainsKey(_children[i].guid) ) { _selections.Remove(_children[i].guid); }
 				}
 			}
 			
 			if ( _isPressShiftKey )
 			{
 				//↓Shiftキーを押しながらだった場合(前回選択した物から今回選択した物までを選択する)
-				Pair<int,int> fSelectIdxArea = new Pair<int,int>((_lastSelectedItem != null)? _lastSelectedItem.id : 0, _children[pIndex].item.id);
+				Pair<int,int> fSelectIdxArea = new Pair<int,int>((_lastSelectedItem != null)? _lastSelectedItem.id : 0, _children[pIndex].id);
 				//-------------------------------------------------------------
 				if ( fSelectIdxArea.first > fSelectIdxArea.second ) { (fSelectIdxArea.first, fSelectIdxArea.second) = (fSelectIdxArea.second, fSelectIdxArea.first); }
 				//-------------------------------------------------------------
 				for( int i = fSelectIdxArea.first; i <= fSelectIdxArea.second; i++ )
 				{
-					_children[i].item.isSelected = true;
-					if ( !_selections.ContainsKey(_children[i].item.guid) ) { _selections.Add(_children[i].item.guid, _children[i].item); }
+					_children[i].isSelected = true;
+					if ( !_selections.ContainsKey(_children[i].guid) ) { _selections.Add(_children[i].guid, _children[i]); }
 				}
 			}
 			
-			_lastSelectedItem = _children[pIndex].item;
+			_lastSelectedItem = _children[pIndex];
 		}
     }
 }

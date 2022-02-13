@@ -108,6 +108,16 @@ namespace TaskChecker.GuiControl
 		}
 
 		/// <summary>
+		/// コンストラクタ
+		/// </summary>
+		/// <param name="pEntity">初期設定</param>
+		public TaskListItem( Entity pEntity )
+		{
+			InitializeComponent();
+			Setup(pEntity);
+		}
+
+		/// <summary>
 		/// 表示内容の一括セットアップを行なう関数
 		/// </summary>
 		/// <param name="pEntity">全表示内容の設定</param>

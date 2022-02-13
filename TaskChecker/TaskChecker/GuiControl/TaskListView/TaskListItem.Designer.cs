@@ -303,8 +303,9 @@ namespace TaskChecker.GuiControl
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode       = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this._rootContainer);
-			this.Name = "TaskListItem";
-			this.Size = new System.Drawing.Size(500, 300);
+			this.Margin = new System.Windows.Forms.Padding(0);
+			this.Name   = "TaskListItem";
+			this.Size   = new System.Drawing.Size(500, 300);
 			this._rootContainer.Panel1.ResumeLayout(false);
 			this._rootContainer.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this._rootContainer)).EndInit();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -19,12 +20,7 @@ namespace TaskChecker.GuiControl
                 onClickSelected  = value => { SetChildSelected(value.id, true); },
                 onResizeRequest  = ( pItem, pSize ) =>
                 {
-                    if ( pItem.id - 1 >= 0 ) { _children[pItem.id - 1].containerFixedPanel = FixedPanel.Panel1; }
-                    _children[pItem.id].containerFixedPanel = FixedPanel.Panel2;
-                    _rootContainer.Panel2.Controls[0].Size = new Size(Size.Width, _rootContainer.Panel2.Controls[0].Size.Height + (pSize.Height - pItem.Size.Height));
-                    _rootContainer.Panel2.Controls[0].Update();
-                    _children[pItem.id].containerFixedPanel = FixedPanel.None;
-                    if ( pItem.id - 1 >= 0 ) { _children[pItem.id - 1].containerFixedPanel = FixedPanel.None; }
+                    Debug.Print($"[Item-{pItem.id}] onResizeRequest!!");
                 },
             });
         }

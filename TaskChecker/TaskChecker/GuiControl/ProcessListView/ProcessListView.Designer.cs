@@ -31,12 +31,14 @@ namespace TaskChecker.GuiControl
         /// </summary>
         private void InitializeComponent()
         {
-            this._rootContainer    = new System.Windows.Forms.SplitContainer();
-            this._toolBar          = new System.Windows.Forms.ToolStrip();
-            this._addToolButton    = new System.Windows.Forms.ToolStripButton();
-            this._removeToolButton = new System.Windows.Forms.ToolStripButton();
+            this._rootContainer       = new System.Windows.Forms.SplitContainer();
+            this._toolBar             = new System.Windows.Forms.ToolStrip();
+            this._addToolButton       = new System.Windows.Forms.ToolStripButton();
+            this._removeToolButton    = new System.Windows.Forms.ToolStripButton();
+            this._listItemLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this._rootContainer)).BeginInit();
             this._rootContainer.Panel1.SuspendLayout();
+            this._rootContainer.Panel2.SuspendLayout();
             this._rootContainer.SuspendLayout();
             this._toolBar.SuspendLayout();
             this.SuspendLayout();
@@ -58,9 +60,10 @@ namespace TaskChecker.GuiControl
             // _rootContainer.Panel2
             // 
             this._rootContainer.Panel2.AutoScroll = true;
-            this._rootContainer.Size              = new System.Drawing.Size(500, 300);
-            this._rootContainer.SplitterDistance  = 25;
-            this._rootContainer.TabIndex          = 1;
+            this._rootContainer.Panel2.Controls.Add(this._listItemLayoutPanel);
+            this._rootContainer.Size             = new System.Drawing.Size(500, 300);
+            this._rootContainer.SplitterDistance = 25;
+            this._rootContainer.TabIndex         = 1;
             // 
             // _toolBar
             // 
@@ -91,6 +94,19 @@ namespace TaskChecker.GuiControl
             this._removeToolButton.Text                  =  "toolStripButton2";
             this._removeToolButton.Click                 += new System.EventHandler(this._removeToolButton_Click);
             // 
+            // _listItemLayoutPanel
+            // 
+            this._listItemLayoutPanel.ColumnCount = 1;
+            this._listItemLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this._listItemLayoutPanel.Dock     = System.Windows.Forms.DockStyle.Top;
+            this._listItemLayoutPanel.Location = new System.Drawing.Point(0, 0);
+            this._listItemLayoutPanel.Margin   = new System.Windows.Forms.Padding(0);
+            this._listItemLayoutPanel.Name     = "_listItemLayoutPanel";
+            this._listItemLayoutPanel.RowCount = 1;
+            this._listItemLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this._listItemLayoutPanel.Size     = new System.Drawing.Size(500, 50);
+            this._listItemLayoutPanel.TabIndex = 0;
+            // 
             // ProcessListView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -100,12 +116,15 @@ namespace TaskChecker.GuiControl
             this.Size = new System.Drawing.Size(500, 300);
             this._rootContainer.Panel1.ResumeLayout(false);
             this._rootContainer.Panel1.PerformLayout();
+            this._rootContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this._rootContainer)).EndInit();
             this._rootContainer.ResumeLayout(false);
             this._toolBar.ResumeLayout(false);
             this._toolBar.PerformLayout();
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.TableLayoutPanel _listItemLayoutPanel;
 
         private System.Windows.Forms.SplitContainer _rootContainer;
 
