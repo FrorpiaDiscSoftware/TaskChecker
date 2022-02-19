@@ -47,6 +47,7 @@ namespace TaskChecker.GuiControl
 			this._removeProcessButton    = new System.Windows.Forms.Button();
 			this._contentContainer       = new System.Windows.Forms.SplitContainer();
 			this._memoTextArea           = new System.Windows.Forms.RichTextBox();
+			this._processListLayoutPanel = new TaskChecker.GuiControl.ProcessListLayoutPanel();
 			((System.ComponentModel.ISupportInitialize)(this._rootContainer)).BeginInit();
 			this._rootContainer.Panel1.SuspendLayout();
 			this._rootContainer.Panel2.SuspendLayout();
@@ -69,16 +70,18 @@ namespace TaskChecker.GuiControl
 			this._processTitleContainer.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this._contentContainer)).BeginInit();
 			this._contentContainer.Panel1.SuspendLayout();
+			this._contentContainer.Panel2.SuspendLayout();
 			this._contentContainer.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// _rootContainer
 			// 
-			this._rootContainer.Dock        = System.Windows.Forms.DockStyle.Fill;
-			this._rootContainer.FixedPanel  = System.Windows.Forms.FixedPanel.Panel1;
-			this._rootContainer.Location    = new System.Drawing.Point(0, 0);
-			this._rootContainer.Name        = "_rootContainer";
-			this._rootContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
+			this._rootContainer.Dock            = System.Windows.Forms.DockStyle.Fill;
+			this._rootContainer.FixedPanel      = System.Windows.Forms.FixedPanel.Panel1;
+			this._rootContainer.IsSplitterFixed = true;
+			this._rootContainer.Location        = new System.Drawing.Point(0, 0);
+			this._rootContainer.Name            = "_rootContainer";
+			this._rootContainer.Orientation     = System.Windows.Forms.Orientation.Horizontal;
 			// 
 			// _rootContainer.Panel1
 			// 
@@ -94,11 +97,12 @@ namespace TaskChecker.GuiControl
 			// 
 			// _headerContainer
 			// 
-			this._headerContainer.Dock       = System.Windows.Forms.DockStyle.Fill;
-			this._headerContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-			this._headerContainer.Location   = new System.Drawing.Point(0, 0);
-			this._headerContainer.Margin     = new System.Windows.Forms.Padding(0);
-			this._headerContainer.Name       = "_headerContainer";
+			this._headerContainer.Dock            = System.Windows.Forms.DockStyle.Fill;
+			this._headerContainer.FixedPanel      = System.Windows.Forms.FixedPanel.Panel1;
+			this._headerContainer.IsSplitterFixed = true;
+			this._headerContainer.Location        = new System.Drawing.Point(0, 0);
+			this._headerContainer.Margin          = new System.Windows.Forms.Padding(0);
+			this._headerContainer.Name            = "_headerContainer";
 			// 
 			// _headerContainer.Panel1
 			// 
@@ -128,11 +132,12 @@ namespace TaskChecker.GuiControl
 			// 
 			// _headerStatusContainer
 			// 
-			this._headerStatusContainer.Dock       = System.Windows.Forms.DockStyle.Fill;
-			this._headerStatusContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-			this._headerStatusContainer.Location   = new System.Drawing.Point(0, 0);
-			this._headerStatusContainer.Margin     = new System.Windows.Forms.Padding(0);
-			this._headerStatusContainer.Name       = "_headerStatusContainer";
+			this._headerStatusContainer.Dock            = System.Windows.Forms.DockStyle.Fill;
+			this._headerStatusContainer.FixedPanel      = System.Windows.Forms.FixedPanel.Panel1;
+			this._headerStatusContainer.IsSplitterFixed = true;
+			this._headerStatusContainer.Location        = new System.Drawing.Point(0, 0);
+			this._headerStatusContainer.Margin          = new System.Windows.Forms.Padding(0);
+			this._headerStatusContainer.Name            = "_headerStatusContainer";
 			// 
 			// _headerStatusContainer.Panel1
 			// 
@@ -169,11 +174,12 @@ namespace TaskChecker.GuiControl
 			// 
 			// _headerContentContainer
 			// 
-			this._headerContentContainer.Dock       = System.Windows.Forms.DockStyle.Fill;
-			this._headerContentContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-			this._headerContentContainer.Location   = new System.Drawing.Point(0, 0);
-			this._headerContentContainer.Margin     = new System.Windows.Forms.Padding(0);
-			this._headerContentContainer.Name       = "_headerContentContainer";
+			this._headerContentContainer.Dock            = System.Windows.Forms.DockStyle.Fill;
+			this._headerContentContainer.FixedPanel      = System.Windows.Forms.FixedPanel.Panel2;
+			this._headerContentContainer.IsSplitterFixed = true;
+			this._headerContentContainer.Location        = new System.Drawing.Point(0, 0);
+			this._headerContentContainer.Margin          = new System.Windows.Forms.Padding(0);
+			this._headerContentContainer.Name            = "_headerContentContainer";
 			// 
 			// _headerContentContainer.Panel1
 			// 
@@ -272,6 +278,7 @@ namespace TaskChecker.GuiControl
 			// _contentContainer
 			// 
 			this._contentContainer.Dock        = System.Windows.Forms.DockStyle.Fill;
+			this._contentContainer.FixedPanel  = System.Windows.Forms.FixedPanel.Panel1;
 			this._contentContainer.Location    = new System.Drawing.Point(0, 0);
 			this._contentContainer.Name        = "_contentContainer";
 			this._contentContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -283,6 +290,7 @@ namespace TaskChecker.GuiControl
 			// 
 			// _contentContainer.Panel2
 			// 
+			this._contentContainer.Panel2.Controls.Add(this._processListLayoutPanel);
 			this._contentContainer.Panel2.Padding   = new System.Windows.Forms.Padding(25, 0, 0, 0);
 			this._contentContainer.Size             = new System.Drawing.Size(500, 271);
 			this._contentContainer.SplitterDistance = 203;
@@ -298,13 +306,24 @@ namespace TaskChecker.GuiControl
 			this._memoTextArea.TabIndex          = 1;
 			this._memoTextArea.Text              = "";
 			// 
+			// _processListLayoutPanel
+			// 
+			this._processListLayoutPanel.Dock            = System.Windows.Forms.DockStyle.Fill;
+			this._processListLayoutPanel.layoutPanelSize = new System.Drawing.Size(475, 50);
+			this._processListLayoutPanel.Location        = new System.Drawing.Point(25, 0);
+			this._processListLayoutPanel.Margin          = new System.Windows.Forms.Padding(0);
+			this._processListLayoutPanel.Name            = "_processListLayoutPanel";
+			this._processListLayoutPanel.Size            = new System.Drawing.Size(475, 64);
+			this._processListLayoutPanel.TabIndex        = 0;
+			// 
 			// TaskListItem
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode       = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this._rootContainer);
-			this.Name = "TaskListItem";
-			this.Size = new System.Drawing.Size(500, 300);
+			this.Margin = new System.Windows.Forms.Padding(0);
+			this.Name   = "TaskListItem";
+			this.Size   = new System.Drawing.Size(500, 300);
 			this._rootContainer.Panel1.ResumeLayout(false);
 			this._rootContainer.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this._rootContainer)).EndInit();
@@ -327,10 +346,13 @@ namespace TaskChecker.GuiControl
 			((System.ComponentModel.ISupportInitialize)(this._processTitleContainer)).EndInit();
 			this._processTitleContainer.ResumeLayout(false);
 			this._contentContainer.Panel1.ResumeLayout(false);
+			this._contentContainer.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this._contentContainer)).EndInit();
 			this._contentContainer.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
+
+		private TaskChecker.GuiControl.ProcessListLayoutPanel _processListLayoutPanel;
 
 		private System.Windows.Forms.TextBox _processTitleInputBox;
 
